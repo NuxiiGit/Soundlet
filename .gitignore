@@ -1,9 +1,5 @@
 src/bin/
 src/obj/
-src/My Project/
 *.user
 *.suo
 _ReSharper.*
-*.sln
-*.sln.cache
-*.vbproj
