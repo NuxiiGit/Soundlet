@@ -1,4 +1,4 @@
-Module Soundlet
+Module Noisii
 
     Sub Main()
         Console.writeLine("Hello!")

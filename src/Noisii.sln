@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Soundlet", "Soundlet.vbproj", "{EB7B8A30-0B94-44CF-BEE2-27CE3A3031C8}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Noisii", "Noisii.vbproj", "{EB7B8A30-0B94-44CF-BEE2-27CE3A3031C8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
