@@ -1,3 +1,3 @@
-# Noisii
+# Playlist Manager
 
-This repository contains the source code for a command line tool for organising and playing music files.
+This repository contains the source code for a command line tool used for organising and building playlist files.
