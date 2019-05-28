@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{57047FA1-B0D3-43B1-92AA-312AC4BA9421}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <StartupObject>mpc_playlist.MPCPlaylistManager</StartupObject>
+    <StartupObject>mpc_playlist.PlaylistManager</StartupObject>
     <RootNamespace>mpc_playlist</RootNamespace>
     <AssemblyName>mpc-playlist</AssemblyName>
     <FileAlignment>512</FileAlignment>
@@ -68,7 +68,8 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MPCPlaylistManager.vb" />
+    <Compile Include="MediaPlayerPlaylist.vb" />
+    <Compile Include="PlaylistManager.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
