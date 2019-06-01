@@ -52,10 +52,10 @@ Module MediaPlayerPlaylist
     ''' Adds default filepaths at runtime.
     ''' </summary>
     Sub New()
-        AddExtension(".mpcpl", AddressOf LoadFormatMPCPL, AddressOf LoadFormatNOTHING)
-        AddExtension(".pls", AddressOf LoadFormatPLS, AddressOf LoadFormatNOTHING)
-        AddExtension(".m3u", AddressOf LoadFormatM3U, AddressOf LoadFormatNOTHING)
-        AddExtension(".asx", AddressOf LoadFormatASX, AddressOf LoadFormatNOTHING)
+        AddExtension(".mpcpl", AddressOf LoadFormatMPCPL, AddressOf SaveFormatNOTHING)
+        AddExtension(".pls", AddressOf LoadFormatPLS, AddressOf SaveFormatNOTHING)
+        AddExtension(".m3u", AddressOf LoadFormatM3U, AddressOf SaveFormatNOTHING)
+        AddExtension(".asx", AddressOf LoadFormatASX, AddressOf SaveFormatNOTHING)
     End Sub
 
     ''' <summary>
@@ -161,9 +161,9 @@ Module MediaPlayerPlaylist
     End Sub
 
     ''' <summary>
-    ''' <see cref="ExtensionPtrOUT"/>
+    ''' <see cref="ExtensionPtrOut"/>
     ''' </summary>
-    Private Sub LoadFormatNOTHING(Byref stream As StreamWriter, ByRef paths As String())
+    Private Sub SaveFormatNOTHING(Byref stream As StreamWriter, ByRef paths As String())
         
     End Sub
 
