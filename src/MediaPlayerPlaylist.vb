@@ -84,4 +84,13 @@ Module MediaPlayerPlaylist
         End While
     End Sub
 
+    ''' <summary>
+    ''' <see cref="ExtensionPtr"/>
+    ''' </summary>
+    Private Sub LoadFormatM3U(Byref stream As StreamReader, ByRef paths As List(Of String))
+        While (Not stream.EndOfStream)
+            paths.Add(stream.ReadLine())
+        End While
+    End Sub
+
 End Module
