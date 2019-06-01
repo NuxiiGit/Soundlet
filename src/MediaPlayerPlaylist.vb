@@ -8,32 +8,55 @@ Imports System.IO
 Module MediaPlayerPlaylist
 
     Private Const MPC_HEADER As String = "MPCPLAYLIST"
+
+    ''' <summary>
+    ''' Maintains a relation between file extensions and their decoder function.
+    ''' </summary>
     Private fileExtensions As Dictionary(Of String, ExtensionPtr) = New Dictionary(Of String, ExtensionPtr)
+
+    ''' <summary>
+    ''' Captures the paths from this stream and inserts them into the <paramref name="paths"/> list.
+    ''' </summary>
+    ''' <param name="stream">The input stream for this file.</param>
+    ''' <param name="paths">The output list to insert path names.</param>
     Private Delegate Sub ExtensionPtr(ByRef stream As StreamReader, ByRef paths As List(Of String))
 
+    ''' <summary>
+    ''' Adds default filepaths at runtime.
+    ''' </summary>
     Sub New()
         fileExtensions.Add(".mpcpl", AddressOf LoadFormatMPCPL)
     End Sub
 
+    ''' <summary>
+    ''' Decodes the contents of a valid playlist file and returns an array of sound filepaths within.
+    ''' </summary>
+    ''' <param name="filepath">The path of the playlist file.</param>
+    ''' <returns>A <c>String()</c> of filepaths.</returns>
+    ''' ''' <exception cref="IOException">Thrown when there was an error loading the file contents.</exception>
     Public Function LoadFormat(ByVal filepath As String) As String()
-        If (Not My.Computer.FileSystem.FileExists(filepath)) Then Throw New ArgumentException("Illegal filepath.")
+        If (Not My.Computer.FileSystem.FileExists(filepath)) Then Throw New IOException("Illegal filepath.")
         Dim input As StreamReader = My.Computer.FileSystem.OpenTextFileReader(filepath)
-        If input.EndOfStream Then Throw New ArgumentException("File cannot be empty.")
+        If input.EndOfStream Then Throw New IOException("File cannot be empty.")
         '' compile paths
         Dim paths As List(Of String) = New List(Of String)
         Dim ext As String = Path.GetExtension(filepath)
-        If (Not fileExtensions.ContainsKey(ext)) Then Throw New ArgumentException("Unknown file extension '" & ext & "'.")
+        If (Not fileExtensions.ContainsKey(ext)) Then Throw New IOException("Unknown file extension '" & ext & "'.")
         fileExtensions(ext)(input, paths)
         input.Close()
         input.Dispose()
         Return paths.ToArray()
     End Function
 
+    ''' <summary>
+    ''' <see cref="ExtensionPtr"/>
+    ''' </summary>
+    ''' <exception cref="IOException">Thrown when there was an error loading the file contents.</exception>
     Private Sub LoadFormatMPCPL(Byref stream As StreamReader, ByRef paths As List(Of String))
-        If (stream.ReadLine() <> MPC_HEADER) Then Throw New ArgumentException("Invalid file format.")
+        If (stream.ReadLine() <> MPC_HEADER) Then Throw New IOException("Invalid file format.")
         While (Not stream.EndOfStream)
             Dim record As String() = stream.ReadLine().Split(","c)
-            If (record.Length <> 3) Then Throw New ArgumentException("Malformed file structure.")
+            If (record.Length <> 3) Then Throw New IOException("Malformed file structure.")
             If (record(1) = "filename") Then
                 paths.Add(record(2))
             End If
