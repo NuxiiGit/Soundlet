@@ -14,26 +14,75 @@ Module MediaPlayerPlaylist
     Private Const PLS_HEADER As String = "[playlist]"
 
     ''' <summary>
-    ''' Maintains a relation between file extensions and their decoder function.
+    ''' Maintains a relationship between file extensions and thei decoder/encoder function pointers.
     ''' </summary>
-    Private fileExtensions As Dictionary(Of String, ExtensionPtr) = New Dictionary(Of String, ExtensionPtr)
+    Private fileExtensions As Dictionary(Of String, Pair(Of ExtensionPtrIn, ExtensionPtrOut)) _
+        = New Dictionary(Of String, Pair(Of ExtensionPtrIn, ExtensionPtrOut))
+
+    ''' <summary>
+    ''' A private structure used to store a pair of extension function pointers
+    ''' </summary>
+    Private Structure Pair(Of T, S)
+
+        Public ReadOnly left As T
+        Public ReadOnly right As S
+        
+        Public Sub New(ByRef left As T, ByRef right As S)
+            Me.left = left
+            Me.right = right
+        End Sub
+
+    End Structure
 
     ''' <summary>
     ''' Captures the paths from this stream and inserts them into the <paramref name="paths"/> list.
     ''' </summary>
     ''' <param name="stream">The input stream for this file.</param>
     ''' <param name="paths">The output list to insert path names.</param>
-    Private Delegate Sub ExtensionPtr(ByRef stream As StreamReader, ByRef paths As List(Of String))
+    Public Delegate Sub ExtensionPtrIn(ByRef stream As StreamReader, ByRef paths As List(Of String))
+
+    ''' <summary>
+    ''' Pushes the paths from the <paramref name="paths"/> array into this stream.
+    ''' </summary>
+    ''' <param name="stream"></param>
+    ''' <param name="paths"></param>
+    Public Delegate Sub ExtensionPtrOut(ByRef stream As StreamWriter, ByRef paths As String())
 
     ''' <summary>
     ''' Adds default filepaths at runtime.
     ''' </summary>
     Sub New()
-        fileExtensions.Add(".mpcpl", AddressOf LoadFormatMPCPL)
-        fileExtensions.Add(".pls", AddressOf LoadFormatPLS)
-        fileExtensions.Add(".m3u", AddressOf LoadFormatM3U)
-        fileExtensions.Add(".asx", AddressOf LoadFormatASX)
+        AddExtension(".mpcpl", AddressOf LoadFormatMPCPL, AddressOf LoadFormatNOTHING)
+        AddExtension(".pls", AddressOf LoadFormatPLS, AddressOf LoadFormatNOTHING)
+        AddExtension(".m3u", AddressOf LoadFormatM3U, AddressOf LoadFormatNOTHING)
+        AddExtension(".asx", AddressOf LoadFormatASX, AddressOf LoadFormatNOTHING)
     End Sub
+
+    ''' <summary>
+    ''' Adds a new file extension.
+    ''' </summary>
+    ''' <param name="read">The address of the function pointer to decode this file extension. <see cref="ExtensionPtrIn"/></param>
+    ''' <param name="write">The address of the function pointer to encode this file extension. <see cref="ExtensionPtrOut"/></param>
+    Public Sub AddExtension(ByVal ext As String, ByRef read As ExtensionPtrIn, ByRef write As ExtensionPtrOut)
+        fileExtensions.Add(ext, New Pair(Of ExtensionPtrIn, ExtensionPtrOut)(read, write))
+    End Sub
+
+    ''' <summary>
+    ''' Removes a file extension
+    ''' </summary>
+    ''' <exception cref="ArgumentException">Thrown when the extension does not exist.</exception>
+    Public Sub RemoveExtension(ByVal ext As String)
+        If (Not fileExtensions.ContainsKey(ext)) Then Throw New ArgumentException("Extension does not exist.")
+        fileExtensions.Remove(ext)
+    End Sub
+
+    ''' <summary>
+    ''' returns whether a file extension exists
+    ''' </summary>
+    ''' <returns><c>True</c> of the extension exists and <c>False</c> otherwise.</returns>
+    Public Function ContainsExtension(ByVal ext As String) As Boolean
+        Return fileExtensions.ContainsKey(ext)
+    End Function
 
     ''' <summary>
     ''' Decodes the contents of a valid playlist file and returns an array of sound filepaths within.
@@ -49,14 +98,14 @@ Module MediaPlayerPlaylist
         Dim paths As List(Of String) = New List(Of String)
         Dim ext As String = Path.GetExtension(filepath)
         If (Not fileExtensions.ContainsKey(ext)) Then Throw New IOException("Unknown file extension '" & ext & "'.")
-        fileExtensions(ext)(input, paths)
+        fileExtensions(ext).left(input, paths)
         input.Close()
         input.Dispose()
         Return paths.ToArray()
     End Function
 
     ''' <summary>
-    ''' <see cref="ExtensionPtr"/>
+    ''' <see cref="ExtensionPtrIn"/>
     ''' </summary>
     ''' <exception cref="IOException">Thrown when there was an error loading the file contents.</exception>
     Private Sub LoadFormatMPCPL(Byref stream As StreamReader, ByRef paths As List(Of String))
@@ -71,7 +120,7 @@ Module MediaPlayerPlaylist
     End Sub
 
     ''' <summary>
-    ''' <see cref="ExtensionPtr"/>
+    ''' <see cref="ExtensionPtrIn"/>
     ''' </summary>
     ''' <exception cref="IOException">Thrown when there was an error loading the file contents.</exception>
     Private Sub LoadFormatPLS(Byref stream As StreamReader, ByRef paths As List(Of String))
@@ -90,7 +139,7 @@ Module MediaPlayerPlaylist
     End Sub
 
     ''' <summary>
-    ''' <see cref="ExtensionPtr"/>
+    ''' <see cref="ExtensionPtrIn"/>
     ''' </summary>
     Private Sub LoadFormatM3U(Byref stream As StreamReader, ByRef paths As List(Of String))
         While (Not stream.EndOfStream)
@@ -99,7 +148,7 @@ Module MediaPlayerPlaylist
     End Sub
 
     ''' <summary>
-    ''' <see cref="ExtensionPtr"/>
+    ''' <see cref="ExtensionPtrIn"/>
     ''' </summary>
     Private Sub LoadFormatASX(Byref stream As StreamReader, ByRef paths As List(Of String))
         Dim xml As XmlReader = XmlReader.Create(stream)
@@ -109,6 +158,13 @@ Module MediaPlayerPlaylist
                     AndAlso xml.MoveToFirstAttribute())) Then Throw New IOException("Malformed file structure.")
             paths.Add(xml.Value)
         End While
+    End Sub
+
+    ''' <summary>
+    ''' <see cref="ExtensionPtrOUT"/>
+    ''' </summary>
+    Private Sub LoadFormatNOTHING(Byref stream As StreamWriter, ByRef paths As String())
+        
     End Sub
 
 End Module
