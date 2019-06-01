@@ -1,6 +1,9 @@
 ﻿Imports System.IO.StreamReader
 Imports System.IO.StreamWriter
 Imports System.IO
+Imports System.Xml.XmlReader
+Imports System.Xml.XmlWriter
+Imports System.Xml
 
 ''' <summary>
 ''' A module which contains proceedures for managing Media Player Classic playlist formats.
@@ -28,6 +31,8 @@ Module MediaPlayerPlaylist
     Sub New()
         fileExtensions.Add(".mpcpl", AddressOf LoadFormatMPCPL)
         fileExtensions.Add(".pls", AddressOf LoadFormatPLS)
+        fileExtensions.Add(".m3u", AddressOf LoadFormatM3U)
+        fileExtensions.Add(".asx", AddressOf LoadFormatASX)
     End Sub
 
     ''' <summary>
@@ -90,6 +95,19 @@ Module MediaPlayerPlaylist
     Private Sub LoadFormatM3U(Byref stream As StreamReader, ByRef paths As List(Of String))
         While (Not stream.EndOfStream)
             paths.Add(stream.ReadLine())
+        End While
+    End Sub
+
+    ''' <summary>
+    ''' <see cref="ExtensionPtr"/>
+    ''' </summary>
+    Private Sub LoadFormatASX(Byref stream As StreamReader, ByRef paths As List(Of String))
+        Dim xml As XmlReader = XmlReader.Create(stream)
+        If (Not xml.ReadToFollowing("ASX")) Then Throw New IOException("Invalid file format.")
+        While (xml.ReadToFollowing("Entry"))
+            If (Not (xml.ReadToDescendant("Ref") _
+                    AndAlso xml.MoveToFirstAttribute())) Then Throw New IOException("Malformed file structure.")
+            paths.Add(xml.Value)
         End While
     End Sub
 
