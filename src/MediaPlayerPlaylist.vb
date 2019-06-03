@@ -120,6 +120,18 @@ Module MediaPlayerPlaylist
     End Sub
 
     ''' <summary>
+    ''' <see cref="ExtensionPtrOut"/>
+    ''' </summary>
+    Private Sub SaveFormatMPCPL(Byref stream As StreamWriter, ByRef paths As String())
+        stream.WriteLine(MPCPL_HEADER)
+        Dim i As Integer = 1
+        For Each path In paths
+            stream.WriteLine(i & ",type,0")
+            stream.WriteLine(i & ",filename," & path)
+        Next
+    End Sub
+
+    ''' <summary>
     ''' <see cref="ExtensionPtrIn"/>
     ''' </summary>
     ''' <exception cref="IOException">Thrown when there was an error loading the file contents.</exception>
@@ -150,6 +162,7 @@ Module MediaPlayerPlaylist
     ''' <summary>
     ''' <see cref="ExtensionPtrIn"/>
     ''' </summary>
+    ''' <exception cref="IOException">Thrown when there was an error loading the file contents.</exception>
     Private Sub LoadFormatASX(Byref stream As StreamReader, ByRef paths As List(Of String))
         Dim xml As XmlReader = XmlReader.Create(stream)
         If (Not xml.ReadToFollowing("ASX")) Then Throw New IOException("Invalid file format.")
