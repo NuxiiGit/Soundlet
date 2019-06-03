@@ -94,15 +94,14 @@ Module MediaPlayerPlaylist
     ''' <exception cref="ArgumentException">Thrown when the file extension for <paramref name="filepath"/> is not supported.</exception>
     Public Function LoadFormat(ByVal filepath As String) As String()
         If (Not My.Computer.FileSystem.FileExists(filepath)) Then Throw New IOException("Illegal filepath.")
-        Dim input As StreamReader = My.Computer.FileSystem.OpenTextFileReader(filepath)
-        If input.EndOfStream Then Throw New IOException("File cannot be empty.")
-        '' compile paths
         Dim paths As List(Of String) = New List(Of String)
-        Dim ext As String = Path.GetExtension(filepath)
-        If (Not fileExtensions.ContainsKey(ext)) Then Throw New ArgumentException("Unknown file extension '" & ext & "'.")
-        fileExtensions(ext).left(input, paths)
-        input.Close()
-        input.Dispose()
+        Using input As StreamReader = My.Computer.FileSystem.OpenTextFileReader(filepath)
+            If input.EndOfStream Then Throw New IOException("File cannot be empty.")
+            '' compile paths
+            Dim ext As String = Path.GetExtension(filepath)
+            If (Not fileExtensions.ContainsKey(ext)) Then Throw New ArgumentException("Unknown file extension '" & ext & "'.")
+            fileExtensions(ext).left(input, paths)
+        End Using
         Return paths.ToArray()
     End Function
 
@@ -112,12 +111,11 @@ Module MediaPlayerPlaylist
     ''' <param name="filepath">The path of the playlist file.</param>
     ''' <exception cref="ArgumentException">Thrown when the file extension for <paramref name="filepath"/> is not supported.</exception>
     Public Sub SaveFormat(ByVal filepath As String, ByVal paths As String())
-        Dim output As StreamWriter = My.Computer.FileSystem.OpenTextFileWriter(filepath, false)
-        Dim ext As String = Path.GetExtension(filepath)
-        If (Not fileExtensions.ContainsKey(ext)) Then Throw New ArgumentException("Unknown file extension '" & ext & "'.")
-        fileExtensions(ext).right(output, paths)
-        output.Close()
-        output.Dispose()
+        Using output As StreamWriter = My.Computer.FileSystem.OpenTextFileWriter(filepath, false)
+            Dim ext As String = Path.GetExtension(filepath)
+            If (Not fileExtensions.ContainsKey(ext)) Then Throw New ArgumentException("Unknown file extension '" & ext & "'.")
+            fileExtensions(ext).right(output, paths)
+        End Using
     End Sub
 
     ''' <summary>
@@ -129,9 +127,7 @@ Module MediaPlayerPlaylist
         While (Not stream.EndOfStream)
             Dim record As String() = stream.ReadLine().Split(","c)
             If (record.Length <> 3) Then Throw New IOException("Malformed file structure.")
-            If (record(1) = "filename") Then
-                paths.Add(record(2))
-            End If
+            If (record(1) = "filename") Then paths.Add(record(2))
         End While
     End Sub
 
@@ -161,9 +157,7 @@ Module MediaPlayerPlaylist
         While (Not stream.EndOfStream)
             Dim record As String() = stream.ReadLine().Split("="c)
             If (record.Length <> 2) Then Throw New IOException("Malformed file structure.")
-            If (record(0) Like "File*") Then
-                paths.Add(record(1))
-            End If
+            If (record(0) Like "File*") Then paths.Add(record(1))
         End While
     End Sub
 
@@ -204,15 +198,14 @@ Module MediaPlayerPlaylist
     ''' </summary>
     ''' <exception cref="IOException">Thrown when there was an error loading the file contents.</exception>
     Private Sub LoadFormatASX(Byref stream As StreamReader, ByRef paths As List(Of String))
-        Dim xml As XmlReader = XmlReader.Create(stream)
-        If (Not xml.ReadToFollowing("ASX")) Then Throw New IOException("Invalid file format.")
-        While (xml.ReadToFollowing("Entry"))
-            If (Not (xml.ReadToDescendant("Ref") _
-                    AndAlso xml.MoveToFirstAttribute())) Then Throw New IOException("Malformed file structure.")
-            paths.Add(xml.Value)
-        End While
-        xml.Close()
-        xml.Dispose()
+        Using xml As XmlReader = XmlReader.Create(stream)
+            If (Not xml.ReadToFollowing("ASX")) Then Throw New IOException("Invalid file format.")
+            While (xml.ReadToFollowing("Entry"))
+                If (Not (xml.ReadToDescendant("Ref") _
+                        AndAlso xml.MoveToFirstAttribute())) Then Throw New IOException("Malformed file structure.")
+                paths.Add(xml.Value)
+            End While
+        End Using
     End Sub
 
     ''' <summary>
