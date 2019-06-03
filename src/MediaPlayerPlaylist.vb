@@ -91,6 +91,7 @@ Module MediaPlayerPlaylist
     ''' <param name="filepath">The path of the playlist file.</param>
     ''' <returns>A <c>String()</c> of filepaths.</returns>
     ''' <exception cref="IOException">Thrown when there was an error loading the file contents.</exception>
+    ''' <exception cref="ArgumentException">Thrown when the file extension for <paramref name="filepath"/> is not supported.</exception>
     Public Function LoadFormat(ByVal filepath As String) As String()
         If (Not My.Computer.FileSystem.FileExists(filepath)) Then Throw New IOException("Illegal filepath.")
         Dim input As StreamReader = My.Computer.FileSystem.OpenTextFileReader(filepath)
@@ -98,12 +99,26 @@ Module MediaPlayerPlaylist
         '' compile paths
         Dim paths As List(Of String) = New List(Of String)
         Dim ext As String = Path.GetExtension(filepath)
-        If (Not fileExtensions.ContainsKey(ext)) Then Throw New IOException("Unknown file extension '" & ext & "'.")
+        If (Not fileExtensions.ContainsKey(ext)) Then Throw New ArgumentException("Unknown file extension '" & ext & "'.")
         fileExtensions(ext).left(input, paths)
         input.Close()
         input.Dispose()
         Return paths.ToArray()
     End Function
+
+    ''' <summary>
+    ''' Encodes the contents of the <paramref name="paths"/> array into a valid playlist file.
+    ''' </summary>
+    ''' <param name="filepath">The path of the playlist file.</param>
+    ''' <exception cref="ArgumentException">Thrown when the file extension for <paramref name="filepath"/> is not supported.</exception>
+    Public Sub SaveFormat(ByVal filepath As String, ByVal paths As String())
+        Dim output As StreamWriter = My.Computer.FileSystem.OpenTextFileWriter(filepath, false)
+        Dim ext As String = Path.GetExtension(filepath)
+        If (Not fileExtensions.ContainsKey(ext)) Then Throw New ArgumentException("Unknown file extension '" & ext & "'.")
+        fileExtensions(ext).right(output, paths)
+        output.Close()
+        output.Dispose()
+    End Sub
 
     ''' <summary>
     ''' <see cref="ExtensionPtrIn"/>
