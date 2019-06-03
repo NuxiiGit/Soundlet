@@ -128,6 +128,7 @@ Module MediaPlayerPlaylist
         For Each path In paths
             stream.WriteLine(i & ",type,0")
             stream.WriteLine(i & ",filename," & path)
+            i += 1
         Next
     End Sub
 
@@ -148,6 +149,20 @@ Module MediaPlayerPlaylist
                 paths.Add(record(1))
             End If
         End While
+    End Sub
+
+    ''' <summary>
+    ''' <see cref="ExtensionPtrOut"/>
+    ''' </summary>
+    Private Sub SaveFormatPLS(Byref stream As StreamWriter, ByRef paths As String())
+        stream.WriteLine(PLS_HEADER)
+        Dim i As Integer = 1
+        For Each path In paths
+            stream.WriteLine("File" & i & "=" & path)
+            i += 1
+        Next
+        stream.WriteLine("NumberOfEntries=" & i)
+        stream.WriteLine("Version=1")
     End Sub
 
     ''' <summary>
