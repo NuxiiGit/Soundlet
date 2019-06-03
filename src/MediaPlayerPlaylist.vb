@@ -175,6 +175,15 @@ Module MediaPlayerPlaylist
     End Sub
 
     ''' <summary>
+    ''' <see cref="ExtensionPtrOut"/>
+    ''' </summary>
+    Private Sub SaveFormatM3U(Byref stream As StreamWriter, ByRef paths As String())
+        For Each path In paths
+            stream.WriteLine(path)
+        Next
+    End Sub
+
+    ''' <summary>
     ''' <see cref="ExtensionPtrIn"/>
     ''' </summary>
     ''' <exception cref="IOException">Thrown when there was an error loading the file contents.</exception>
