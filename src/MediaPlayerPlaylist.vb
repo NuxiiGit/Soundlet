@@ -4,6 +4,7 @@ Imports System.IO
 Imports System.Xml.XmlReader
 Imports System.Xml.XmlWriter
 Imports System.Xml
+Imports System.ComponentModel
 
 ''' <summary>
 ''' A module which contains proceedures for managing Media Player Classic playlist formats.
@@ -195,6 +196,19 @@ Module MediaPlayerPlaylist
                     AndAlso xml.MoveToFirstAttribute())) Then Throw New IOException("Malformed file structure.")
             paths.Add(xml.Value)
         End While
+        xml.Close()
+        xml.Dispose()
+    End Sub
+
+    ''' <summary>
+    ''' <see cref="ExtensionPtrOut"/>
+    ''' </summary>
+    Private Sub SaveFormatASX(Byref stream As StreamWriter, ByRef paths As String())
+        stream.WriteLine("<ASX version = ""3.0"" >")
+        For Each path In paths
+            stream.WriteLine("<Entry><Ref href = """ & path & """/></Entry>")
+        Next
+        stream.WriteLine("</ASX>")
     End Sub
 
     ''' <summary>
