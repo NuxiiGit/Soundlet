@@ -1,6 +1,4 @@
-﻿Imports mpc_playlist.MediaPlayerPlaylist
-
-Module PlaylistManager
+﻿Module MainModule
 
     Sub Main()
         Dim playlist As String() = MediaPlayerPlaylist.LoadFormat(Console.ReadLine())
