@@ -102,6 +102,12 @@ Module MediaPlayerPlaylist
             If (Not fileExtensions.ContainsKey(ext)) Then Throw New ArgumentException("Unknown file extension '" & ext & "'.")
             fileExtensions(ext).left(input, paths)
         End Using
+        Dim dir As String = Directory.GetCurrentDirectory()
+        Directory.SetCurrentDirectory(Path.GetDirectoryName(filepath))
+        For i As Integer = 0 To (paths.Count - 1)
+            paths(i) = Path.GetFullPath(paths(i))
+        Next
+        Directory.SetCurrentDirectory(dir)
         Return paths.ToArray()
     End Function
 
@@ -217,6 +223,6 @@ Module MediaPlayerPlaylist
             stream.WriteLine("<Entry><Ref href = """ & path & """/></Entry>")
         Next
         stream.WriteLine("</ASX>")
-    End Sub
+    End Sub    
 
 End Module
