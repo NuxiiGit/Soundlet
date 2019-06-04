@@ -4,7 +4,6 @@ Imports System.IO
 Imports System.Xml.XmlReader
 Imports System.Xml.XmlWriter
 Imports System.Xml
-Imports System.ComponentModel
 
 ''' <summary>
 ''' A module which contains proceedures for managing Media Player Classic playlist formats.
@@ -116,7 +115,30 @@ Module MediaPlayerPlaylist
     ''' </summary>
     ''' <param name="filepath">The path of the playlist file.</param>
     ''' <exception cref="ArgumentException">Thrown when the file extension for <paramref name="filepath"/> is not supported.</exception>
-    Public Sub SaveFormat(ByVal filepath As String, ByVal paths As String())
+    Public Sub SaveFormat(ByVal filepath As String, ByVal paths As String(), Optional ByVal relative As Boolean = False)
+        If (relative)
+            '' convert the paths to be relative to 'filepath'
+            Dim delimiter As String = Path.DirectorySeparatorChar
+            Dim dir As String = Directory.GetCurrentDirectory()
+            Directory.SetCurrentDirectory(Path.GetDirectoryName(filepath))
+            For i As Integer = 0 To (paths.Length - 1)
+                Dim targetPath As String = Path.GetFullPath(paths(i))
+                Dim localPath As String = filepath
+                Dim reversals As String = ""
+                Do
+                    localPath = Path.GetDirectoryName(localPath)
+                    If (localPath Is Nothing) Then Exit Do
+                    If (targetPath.Contains(localPath))
+                        targetPath = targetPath.replace(localPath, reversals)
+                        If ((targetPath IsNot Nothing) AndAlso (targetPath(0) = delimiter)) Then targetPath = targetPath.Remove(0, 1)
+                        Exit Do
+                    End If
+                    reversals = ".." & delimiter & reversals
+                Loop
+                paths(i) = targetPath
+            Next
+            Directory.SetCurrentDirectory(dir)
+        End If
         Using output As StreamWriter = My.Computer.FileSystem.OpenTextFileWriter(filepath, false)
             Dim ext As String = Path.GetExtension(filepath)
             If (Not fileExtensions.ContainsKey(ext)) Then Throw New ArgumentException("Unknown file extension '" & ext & "'.")
