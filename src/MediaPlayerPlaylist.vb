@@ -31,7 +31,7 @@ Module MediaPlayerPlaylist
     Public Delegate Sub ExtensionPtrOut(ByRef stream As StreamWriter, ByRef paths As String())
 
     ''' <summary>
-    ''' Adds file extension types at runtime.
+    ''' Adds default file extension parsers at runtime.
     ''' </summary>
     Sub New()
         '' .mpcpl files
