@@ -190,5 +190,18 @@ Class MediaPlayerPlaylist
             Yield path
         Next
     End Function
-    
+
+    ''' <summary>
+    ''' Returns the string representation of this playlist.
+    ''' </summary>
+    ''' <returns>A sequence of sound filepaths, separated by commas.</returns>
+    Public Overrides Function ToString() As String
+        Dim str As String = ""
+        For Each path In paths
+            If (str <> "") Then str = str & ", "
+            str = str & path
+        Next
+        Return str
+    End Function
+
 End Class
