@@ -1,14 +1,16 @@
-﻿Module MainModule
+﻿
+Module MainModule
 
     Sub Main()
-        Dim playlist As String() = MediaPlayerPlaylist.LoadFormat(Console.ReadLine())
+        Dim playlist As MediaPlayerPlaylist = New MediaPlayerPlaylist()
+        playlist.Load(Console.ReadLine())
         Console.WriteLine("Reading...")
         Console.WriteLine("Contents:")
         For Each file In playlist
             Console.WriteLine(file)
         Next
         Console.ReadKey()
-        MediaPlayerPlaylist.SaveFormat(Console.ReadLine(), playlist, true)
+        playlist.Save(Console.ReadLine(), true)
         Console.WriteLine("Writing...")
         Console.ReadKey()
     End Sub
