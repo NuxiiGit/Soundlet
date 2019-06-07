@@ -42,7 +42,7 @@ Public NotInheritable Class Playlist
     ''' <summary>
     ''' Uses reflection to compile the dictionary of file extensions at runtime.
     ''' </summary>
-    Shared Sub Run()
+    Shared Sub New()
         Dim template As Type = GetType(Extension)
         For Each dataType As Type In template.Assembly.GetTypes()
             If (dataType.IsClass() AndAlso dataType.GetInterfaces.Contains(template))
@@ -68,12 +68,8 @@ Public NotInheritable Class Playlist
                     KeyNotFoundException(String.Format("Unknown playlist file extension {0}.", ext))
             extensions(ext).Decode(input, paths)
         End Using
-        Dim dir As String = Directory.GetCurrentDirectory()
-        Directory.SetCurrentDirectory(Path.GetDirectoryName(filepath))
-        For i As Integer = 0 To (paths.Count - 1)
-            paths(i) = Path.GetFullPath(paths(i))
-        Next
-        Directory.SetCurrentDirectory(dir)
+        Dim dir As String = Path.GetDirectoryName(filepath)
+        paths.ForEach(Function(ByVal path As String) Playlist.ToAbsolute(dir, path))
     End Sub
 
     ''' <summary>
@@ -82,29 +78,11 @@ Public NotInheritable Class Playlist
     ''' <param name="filepath">The path of the playlist file.</param>
     ''' <exception cref="KeyNotFoundException">Thrown when the file extension for <paramref name="filepath"/> is not supported.</exception>
     Public Sub Save(ByVal filepath As String, Optional ByVal relative As Boolean = False)
+        Dim paths As List(Of String) = New List(Of String)(Me.paths)
         If (relative)
             '' convert the paths to be relative to 'filepath'
-            Dim paths As String() = Me.paths.ToArray()
-            Dim delimiter As String = Path.DirectorySeparatorChar
-            Dim dir As String = Directory.GetCurrentDirectory()
-            Directory.SetCurrentDirectory(Path.GetDirectoryName(filepath))
-            For i As Integer = 0 To (paths.Length - 1)
-                Dim targetPath As String = Path.GetFullPath(paths(i))
-                Dim localPath As String = filepath
-                Dim reversals As String = ""
-                Do
-                    localPath = Path.GetDirectoryName(localPath)
-                    If (localPath Is Nothing) Then Exit Do
-                    If (targetPath.Contains(localPath))
-                        targetPath = targetPath.replace(localPath, reversals)
-                        If ((targetPath IsNot Nothing) AndAlso (targetPath(0) = delimiter)) Then targetPath = targetPath.Remove(0, 1)
-                        Exit Do
-                    End If
-                    reversals = ".." & delimiter & reversals
-                Loop
-                paths(i) = targetPath
-            Next
-            Directory.SetCurrentDirectory(dir)
+            Dim dir As String = Path.GetDirectoryName(filepath)
+            paths.ForEach(Function(ByVal path As String) Playlist.ToRelative(dir, path))
         End If
         Using output As StreamWriter = My.Computer.FileSystem.OpenTextFileWriter(filepath, false)
             Dim ext As String = Path.GetExtension(filepath)
@@ -120,5 +98,43 @@ Public NotInheritable Class Playlist
     Public Sub Clear()
         paths.Clear()
     End Sub
+
+    ''' <summary>
+    ''' Converts a filepath to an absolute representation.
+    ''' </summary>
+    ''' <param name="local">The local directory.</param>
+    ''' <param name="filepath">The filepath to convert.</param>
+    Private Shared Function ToAbsolute(ByVal local As String, ByVal filepath As String) As String
+        Dim dir As String = Directory.GetCurrentDirectory()
+        Directory.SetCurrentDirectory(local)
+        filepath = Path.GetFullPath(filepath)
+        Directory.SetCurrentDirectory(dir)
+        Return filepath
+    End Function
+
+    ''' <summary>
+    ''' Converts a filepath to a relative representation.
+    ''' </summary>
+    ''' <param name="local">The local directory.</param>
+    ''' <param name="filepath">The filepath to convert.</param>
+    Private Shared Function ToRelative(ByVal local As String, ByVal filepath As String) As String
+        Dim Static delimiter As String = Path.DirectorySeparatorChar
+        Dim dir As String = Directory.GetCurrentDirectory()
+        Directory.SetCurrentDirectory(local)
+        Dim backtracks As String = ""
+        Do
+            If (local Is Nothing) Then Exit Do
+            If (filepath.Contains(local))
+                filepath = filepath.Replace(local, backtracks)
+                If ((filepath IsNot Nothing) AndAlso (filepath(0) = delimiter)) Then _
+                        filepath = filepath.Remove(0, 1)
+                Exit Do
+            End If
+            local = Path.GetDirectoryName(local)
+            backtracks = ".." & delimiter & backtracks
+        Loop
+        Directory.SetCurrentDirectory(dir)
+        Return filepath
+    End Function
 
 End Class
