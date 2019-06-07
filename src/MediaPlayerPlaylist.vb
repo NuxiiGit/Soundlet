@@ -117,7 +117,7 @@ Module MediaPlayerPlaylist
     ''' <returns>A <c>String()</c> of filepaths.</returns>
     ''' <exception cref="IOException">Thrown when there was an error loading the file contents.</exception>
     ''' <exception cref="ArgumentException">Thrown when the file extension for <paramref name="filepath"/> is not supported.</exception>
-    Public Function Load(ByVal filepath As String) As String()
+    Public Function Decode(ByVal filepath As String) As String()
         If (Not My.Computer.FileSystem.FileExists(filepath)) Then Throw New IOException("Illegal filepath.")
         Dim paths As List(Of String) = New List(Of String)
         Using input As StreamReader = My.Computer.FileSystem.OpenTextFileReader(filepath)
@@ -141,7 +141,7 @@ Module MediaPlayerPlaylist
     ''' </summary>
     ''' <param name="filepath">The path of the playlist file.</param>
     ''' <exception cref="ArgumentException">Thrown when the file extension for <paramref name="filepath"/> is not supported.</exception>
-    Public Sub Save(ByVal filepath As String, ByVal paths As String(), Optional ByVal relative As Boolean = False)
+    Public Sub Encode(ByVal filepath As String, ByVal paths As String(), Optional ByVal relative As Boolean = False)
         If (relative)
             '' convert the paths to be relative to 'filepath'
             Dim delimiter As String = Path.DirectorySeparatorChar

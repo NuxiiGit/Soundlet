@@ -1,8 +1,10 @@
-﻿Imports Playlist = mpc_playlist.MediaPlayerPlaylist
-
+﻿
 Module MainModule
 
     Sub Main()
+
+        Playlist.Run()
+        Console.ReadKey()
 
         Dim a As Integer() = {1, 2, 3}.Select(Function(x) x * 2).ToArray()
         For each item In a
@@ -10,14 +12,14 @@ Module MainModule
         Next
 
         Dim path As String = Console.ReadLine().Trim("""")
-        Dim pls As String() = Playlist.Load(path)
+        Dim pls As String() = MediaPlayerPlaylist.Decode(path)
         Console.WriteLine("Reading...")
         Console.WriteLine("Contents:")
         For Each file In pls
             Console.WriteLine(file)
         Next
         Console.ReadKey()
-        Playlist.Save(Console.ReadLine(), pls, true)
+        MediaPlayerPlaylist.Encode(Console.ReadLine(), pls, true)
         Console.WriteLine("Writing...")
         Console.ReadKey()
     End Sub
