@@ -52,6 +52,28 @@ Public NotInheritable Class Playlist
         Next
     End Sub
 
-    
+    ''' <summary>
+    ''' Loads the contents of a playlist file into the playlist.
+    ''' </summary>
+    ''' <param name="filepath">The path of the playlist file.</param>
+    ''' <exception cref="IOException">Thrown when there was an error loading the file contents.</exception>
+    ''' <exception cref="KeyNotFoundException">Thrown when the file extension for <paramref name="filepath"/> is not supported.</exception>
+    Public Sub Load(ByVal filepath As String)
+        If (Not File.Exists(filepath)) Then Throw New IOException("Playlist file does not exist.")
+        Using input As StreamReader = My.Computer.FileSystem.OpenTextFileReader(filepath)
+            If (input.EndOfStream) Then Throw New IOException("Playlist file cannot be empty.")
+            '' compile paths
+            Dim ext As String = Path.GetExtension(filepath).ToUpper()
+            If (Not extensions.ContainsKey(ext)) Then Throw New _
+                    KeyNotFoundException(String.Format("Unknown playlist file extension {0}.", ext))
+            extensions(ext).Decode(input, paths)
+        End Using
+        Dim dir As String = Directory.GetCurrentDirectory()
+        Directory.SetCurrentDirectory(Path.GetDirectoryName(filepath))
+        For i As Integer = 0 To (paths.Count - 1)
+            paths(i) = Path.GetFullPath(paths(i))
+        Next
+        Directory.SetCurrentDirectory(dir)
+    End Sub
 
 End Class
