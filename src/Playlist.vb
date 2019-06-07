@@ -1,10 +1,7 @@
-﻿Imports System.Reflection
-Imports System.IO.StreamReader
+﻿Imports System.IO.StreamReader
 Imports System.IO.StreamWriter
 Imports System.IO
-Imports System.Xml.XmlReader
-Imports System.Xml.XmlWriter
-Imports System.Xml
+Imports System.Reflection
 
 ''' <summary>
 ''' A class which can be used to construct and manage Media Player (Classic) playlist formats.
