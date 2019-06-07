@@ -76,4 +76,11 @@ Public NotInheritable Class Playlist
         Directory.SetCurrentDirectory(dir)
     End Sub
 
+    ''' <summary>
+    ''' Clears the playlist of its current filepaths.
+    ''' </summary>
+    Public Sub Clear()
+        paths.Clear()
+    End Sub
+
 End Class
