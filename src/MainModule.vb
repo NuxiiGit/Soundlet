@@ -7,6 +7,10 @@ Module MainModule
 
         pls.Load(Console.ReadLine().Trim(""""c))
 
+        For each i In pls
+
+        Next
+
         Console.ReadKey()
 
     End Sub

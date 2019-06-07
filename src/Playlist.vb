@@ -7,7 +7,8 @@ Imports System.Reflection
 ''' A class which can be used to construct and manage Media Player (Classic) playlist formats.
 ''' </summary>
 Public NotInheritable Class Playlist
-    
+    Implements IEnumerable
+
     ''' <summary>
     ''' Maintains a relationship between the name of a file extension, and its actual playlist extension <see cref="Playlist.Extension"/>.
     ''' </summary>
@@ -132,6 +133,16 @@ Public NotInheritable Class Playlist
         Loop
         Directory.SetCurrentDirectory(dir)
         Return filepath
+    End Function
+
+    ''' <summary>
+    ''' Implements the iterator for the playlist.
+    ''' </summary>
+    ''' <returns>An <c>IEnumerator</c> of playlist sound file paths.</returns>
+    Public Iterator Function GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
+        For Each path In paths
+            Yield path
+        Next
     End Function
 
 End Class
