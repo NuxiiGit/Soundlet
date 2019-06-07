@@ -77,6 +77,44 @@ Public NotInheritable Class Playlist
     End Sub
 
     ''' <summary>
+    ''' Encodes the contents of the this playlist into a valid playlist file.
+    ''' </summary>
+    ''' <param name="filepath">The path of the playlist file.</param>
+    ''' <exception cref="KeyNotFoundException">Thrown when the file extension for <paramref name="filepath"/> is not supported.</exception>
+    Public Sub Save(ByVal filepath As String, Optional ByVal relative As Boolean = False)
+        If (relative)
+            '' convert the paths to be relative to 'filepath'
+            Dim paths As String() = Me.paths.ToArray()
+            Dim delimiter As String = Path.DirectorySeparatorChar
+            Dim dir As String = Directory.GetCurrentDirectory()
+            Directory.SetCurrentDirectory(Path.GetDirectoryName(filepath))
+            For i As Integer = 0 To (paths.Length - 1)
+                Dim targetPath As String = Path.GetFullPath(paths(i))
+                Dim localPath As String = filepath
+                Dim reversals As String = ""
+                Do
+                    localPath = Path.GetDirectoryName(localPath)
+                    If (localPath Is Nothing) Then Exit Do
+                    If (targetPath.Contains(localPath))
+                        targetPath = targetPath.replace(localPath, reversals)
+                        If ((targetPath IsNot Nothing) AndAlso (targetPath(0) = delimiter)) Then targetPath = targetPath.Remove(0, 1)
+                        Exit Do
+                    End If
+                    reversals = ".." & delimiter & reversals
+                Loop
+                paths(i) = targetPath
+            Next
+            Directory.SetCurrentDirectory(dir)
+        End If
+        Using output As StreamWriter = My.Computer.FileSystem.OpenTextFileWriter(filepath, false)
+            Dim ext As String = Path.GetExtension(filepath)
+            If (Not extensions.ContainsKey(ext)) Then Throw New _
+                    KeyNotFoundException(String.Format("Unknown playlist file extension {0}.", ext))
+            extensions(ext).Encode(output, paths)
+        End Using
+    End Sub
+
+    ''' <summary>
     ''' Clears the playlist of its current filepaths.
     ''' </summary>
     Public Sub Clear()
