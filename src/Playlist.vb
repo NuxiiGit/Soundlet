@@ -22,18 +22,17 @@ Public NotInheritable Class Playlist
     Public Interface Extension
         
         ''' <summary>
-        ''' Captures the paths from this stream and inserts them into the <paramref name="paths"/> list.
+        ''' Captures the paths from this stream and inserts them into a <c>String()</c>.
         ''' </summary>
         ''' <param name="stream">The input stream for this file.</param>
-        ''' <param name="paths">The output list to insert path names.</param>
-        Sub Decode(ByRef stream As StreamReader, ByRef paths As List(Of String))
+        Function Decode(ByRef stream As StreamReader) As String()
 
         ''' <summary>
         ''' Pushes the paths from the <paramref name="paths"/> array into this stream.
         ''' </summary>
-        ''' <param name="stream"></param>
-        ''' <param name="paths"></param>
-        Sub Encode(ByRef stream As StreamWriter, ByRef paths As List(Of String))
+        ''' <param name="stream">The output stream for this file.</param>
+        ''' <param name="paths">The array of filepaths to encode.</param>
+        Sub Encode(ByRef stream As StreamWriter, ByRef paths As String())
 
     End Interface
 
@@ -64,12 +63,11 @@ Public NotInheritable Class Playlist
             Dim ext As String = Path.GetExtension(filepath).ToUpper()
             If (Not extensions.ContainsKey(ext)) Then Throw New _
                     KeyNotFoundException(String.Format("Unknown playlist file extension {0}.", ext))
-            extensions(ext).Decode(input, paths)
+            Dim dir As String = Path.GetDirectoryName(filepath)
+            For Each path As String In extensions(ext).Decode(input)
+                paths.Add(Playlist.ToAbsolute(dir, path))
+            Next
         End Using
-        Dim dir As String = Path.GetDirectoryName(filepath)
-        For i As Integer = 0 To (paths.Count - 1)
-            paths(i) = Playlist.ToAbsolute(dir, paths(i))
-        Next
     End Sub
 
     ''' <summary>
@@ -78,19 +76,19 @@ Public NotInheritable Class Playlist
     ''' <param name="filepath">The path of the playlist file.</param>
     ''' <exception cref="KeyNotFoundException">Thrown when the file extension for <paramref name="filepath"/> is not supported.</exception>
     Public Sub Save(ByVal filepath As String, Optional ByVal relative As Boolean = False)
-        Dim paths As List(Of String) = New List(Of String)(Me.paths)
+        Dim outputPaths As String() = paths.ToArray()
         If (relative)
             '' convert the paths to be relative to 'filepath'
             Dim dir As String = Path.GetDirectoryName(filepath)
-            For i As Integer = 0 To (paths.Count - 1)
-                paths(i) = Playlist.ToRelative(dir, paths(i))
+            For i As Integer = 0 To (outputPaths.Length - 1)
+                outputPaths(i) = Playlist.ToRelative(dir, outputPaths(i))
             Next
         End If
         Using output As StreamWriter = My.Computer.FileSystem.OpenTextFileWriter(filepath, false)
             Dim ext As String = Path.GetExtension(filepath)
             If (Not extensions.ContainsKey(ext)) Then Throw New _
                     KeyNotFoundException(String.Format("Unknown playlist file extension {0}.", ext))
-            extensions(ext).Encode(output, paths)
+            extensions(ext).Encode(output, outputPaths)
         End Using
     End Sub
 
