@@ -86,6 +86,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Playlist.vb" />
+    <Compile Include="PlaylistParsers\M3U.vb" />
     <Compile Include="PlaylistParsers\MPCPL.vb" />
     <Compile Include="PlaylistParsers\PLS.vb" />
   </ItemGroup>
