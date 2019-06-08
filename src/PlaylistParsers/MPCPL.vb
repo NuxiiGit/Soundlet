@@ -16,7 +16,7 @@ Public Class MPCPL
     ''' <exception cref="IOException">Thrown if there was a problem decoding the file.</exception>
     Public Function Decode(ByRef stream As StreamReader) As String() Implements Playlist.Extension.Decode
         While (Not stream.EndOfStream)
-            If (stream.ReadLine().Trim(" ") <> HEADER) Then GoTo decode
+            If (stream.ReadLine().Trim(" ") = HEADER) Then GoTo decode
         End While
         Throw New IOException("Missing playlist header.")
         decode:
