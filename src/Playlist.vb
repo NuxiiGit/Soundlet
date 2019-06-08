@@ -88,6 +88,30 @@ Public NotInheritable Class Playlist
     End Sub
 
     ''' <summary>
+    ''' Default constructor.
+    ''' </summary>
+    ''' <remarks>Does nothing.</remarks>
+    Sub New() : End Sub
+
+    ''' <summary>
+    ''' Constructs a playlist from a playlist file.
+    ''' </summary>
+    ''' <param name="filepath">The path of the playlist file.</param>
+    Sub New(ByVal filepath As String)
+        Load(filepath)
+    End Sub
+
+    ''' <summary>
+    ''' Constructs a playlist from an array of filepaths.
+    ''' </summary>
+    ''' <param name="paths">An array of filepaths.</param>
+    Sub New(ByVal paths As String())
+        For Each path In paths
+            Add(path)
+        Next
+    End Sub
+
+    ''' <summary>
     ''' Loads the contents of a playlist file into the playlist.
     ''' </summary>
     ''' <param name="filepath">The path of the playlist file.</param>
