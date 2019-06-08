@@ -102,6 +102,14 @@ Public NotInheritable Class Playlist
     End Sub
 
     ''' <summary>
+    ''' Constructs a playlist from an <c>IEnumerable</c> of filepaths.
+    ''' </summary>
+    ''' <param name="enumerator">An <c>IEnumerable</c> of filepaths.</param>
+    Sub New(ByVal enumerator As IEnumerable(Of String))
+        Me.New(enumerator.ToArray)
+    End Sub
+
+    ''' <summary>
     ''' Constructs a playlist from an array of filepaths.
     ''' </summary>
     ''' <param name="paths">An array of filepaths.</param>

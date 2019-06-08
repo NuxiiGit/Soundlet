@@ -8,6 +8,8 @@ Module MainModule
         pls.Load(Console.ReadLine().Trim(""""c))
 
         pls.Add("this.path")
+        
+        pls = New Playlist(pls.Concat(New Playlist({"test.png"})))
 
         For each path In pls
             Console.WriteLine(path)
