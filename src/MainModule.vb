@@ -7,6 +7,8 @@ Module MainModule
 
         pls.Load(Console.ReadLine().Trim(""""c))
 
+        pls.Add("this.path")
+
         For each path In pls
             Console.WriteLine(path)
         Next

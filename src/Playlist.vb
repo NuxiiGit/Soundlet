@@ -7,14 +7,52 @@ Imports System.Reflection
 ''' A class which can be used to construct and manage Media Player (Classic) playlist formats.
 ''' </summary>
 Public NotInheritable Class Playlist
-    Implements IEnumerable
+    Implements IList(Of String)
 
     ''' <summary>
     ''' Maintains a relationship between the name of a file extension, and its actual playlist extension <see cref="Playlist.Extension"/>.
     ''' </summary>
     Private Shared extensions As Dictionary(Of String, Extension) = New Dictionary(Of String, Extension)
     
+    ''' <summary>
+    ''' Stores the list of filepaths for this playlist.
+    ''' </summary>
     Private paths As List(Of String) = New List(Of String)
+
+    ''' <summary>
+    ''' Gets and sets a filepath by index.
+    ''' </summary>
+    ''' <param name="index">The index to lookup.</param>
+    ''' <returns>A filepath found under this index.</returns>
+    Default Public Property Item(index As Integer) As String Implements IList(Of String).Item
+        Get
+            Return paths(index)
+        End Get
+        Set(filepath As String)
+            paths(index) = Path.GetFullPath(filepath)
+        End Set
+    End Property
+
+    ''' <summary>
+    ''' Gets the number of filepaths in this playlist.
+    ''' </summary>
+    ''' <returns>The size of <c>paths</c></returns>
+    Public ReadOnly Property Count As Integer Implements ICollection(Of String).Count
+        Get
+            Return paths.Count
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Returns whether this collection is ReadOnly.
+    ''' </summary>
+    ''' <remarks>It is not.</remarks>
+    ''' <returns><c>True</c> if this collection is ReadOnly and <c>False</c> otherwise.</returns>
+    Public ReadOnly Property IsReadOnly As Boolean Implements ICollection(Of String).IsReadOnly
+        Get
+            Return False
+        End Get
+    End Property
 
     ''' <summary>
     ''' An interface which manages playlist extensions.
@@ -69,7 +107,7 @@ Public NotInheritable Class Playlist
             Next
         End Using
     End Sub
-
+    
     ''' <summary>
     ''' Encodes the contents of the this playlist into a valid playlist file.
     ''' </summary>
@@ -90,13 +128,6 @@ Public NotInheritable Class Playlist
                     KeyNotFoundException(String.Format("Unknown playlist file extension {0}.", ext))
             extensions(ext).Encode(output, outputPaths)
         End Using
-    End Sub
-
-    ''' <summary>
-    ''' Clears the playlist of its current filepaths.
-    ''' </summary>
-    Public Sub Clear()
-        paths.Clear()
     End Sub
 
     ''' <summary>
@@ -141,10 +172,89 @@ Public NotInheritable Class Playlist
     ''' Implements the iterator for the playlist.
     ''' </summary>
     ''' <returns>An <c>IEnumerator</c> of playlist sound file paths.</returns>
-    Public Iterator Function GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
+    Public Iterator Function GetEnumerator() As IEnumerator(Of String) Implements IEnumerable(Of String).GetEnumerator
         For Each path In paths
             Yield path
         Next
+    End Function
+
+    ''' <summary>
+    ''' Implements the iterator for the playlist.
+    ''' </summary>
+    ''' <remarks>Required by interface.</remarks>
+    ''' <returns>An <c>IEnumerator</c> of playlist sound file paths.</returns>
+    Private Function GetEnumeratorB() As IEnumerator Implements IEnumerable.GetEnumerator
+        Return GetEnumerator()
+    End Function
+
+    ''' <summary>
+    ''' Searches for the index of a specific filepath in the playlist.
+    ''' </summary>
+    ''' <param name="filepath"></param>
+    ''' <returns></returns>
+    Public Function IndexOf(filepath As String) As Integer Implements IList(Of String).IndexOf
+        Return paths.IndexOf(Path.GetFullPath(filepath))
+    End Function
+
+    ''' <summary>
+    ''' Inserts a filepath into a specific part of the playlist.
+    ''' </summary>
+    ''' <param name="index">The index to insert the <paramref name="filepath"/> into.</param>
+    ''' <param name="filepath">The filepath of the sound file to insert.</param>
+    Public Sub Insert(index As Integer, filepath As String) Implements IList(Of String).Insert
+        paths.Insert(index, Path.GetFullPath(filepath))
+    End Sub
+
+    ''' <summary>
+    ''' Removes a filepath from a specific part of the playlist.
+    ''' </summary>
+    ''' <param name="index">The index to remove.</param>
+    Public Sub RemoveAt(index As Integer) Implements IList(Of String).RemoveAt
+        paths.RemoveAt(index)
+    End Sub
+
+    ''' <summary>
+    ''' Adds a filepath to this playlist.
+    ''' </summary>
+    ''' <param name="filepath">The filepath to add.</param>
+    Public Sub Add(filepath As String) Implements ICollection(Of String).Add
+        paths.Add(Path.GetFullPath(filepath))
+    End Sub
+
+    ''' <summary>
+    ''' Clears the playlist of its current filepaths.
+    ''' </summary>
+    Public Sub Clear() Implements ICollection(Of String).Clear
+        paths.Clear()
+    End Sub
+
+    ''' <summary>
+    ''' Returns whether the playlist contains a filepath.
+    ''' </summary>
+    ''' <param name="filepath">The filepath to search for.</param>
+    ''' <returns><c>True</c> if the filepath exists and <c>False</c> otherwise.</returns>
+    Public Function Contains(filepath As String) As Boolean Implements ICollection(Of String).Contains
+        Return paths.Contains(Path.GetFullPath(filepath))
+    End Function
+
+    ''' <summary>
+    ''' Converts the playlist into an array.
+    ''' </summary>
+    ''' <param name="array">The array to copy the playlist filepaths to.</param>
+    ''' <param name="arrayIndex">The starting index.</param>
+    Public Sub CopyTo(array As String(), arrayIndex As Integer) Implements ICollection(Of String).CopyTo
+        For Each filepath In paths
+            array(arrayIndex) = filepath
+            arrayIndex += 1
+        Next
+    End Sub
+
+    ''' <summary>
+    ''' Removes a specific filepath from the playlist.
+    ''' </summary>
+    ''' <param name="filepath">The filepath to remove.</param>
+    Public Function Remove(filepath As String) As Boolean Implements ICollection(Of String).Remove
+        Return paths.Remove(Path.GetFullPath(filepath))
     End Function
 
 End Class
