@@ -67,7 +67,9 @@ Public NotInheritable Class Playlist
             extensions(ext).Decode(input, paths)
         End Using
         Dim dir As String = Path.GetDirectoryName(filepath)
-        paths.ForEach(Function(ByVal path As String) Playlist.ToAbsolute(dir, path))
+        For i As Integer = 0 To (paths.Count - 1)
+            paths(i) = Playlist.ToAbsolute(dir, paths(i))
+        Next
     End Sub
 
     ''' <summary>
@@ -80,7 +82,9 @@ Public NotInheritable Class Playlist
         If (relative)
             '' convert the paths to be relative to 'filepath'
             Dim dir As String = Path.GetDirectoryName(filepath)
-            paths.ForEach(Function(ByVal path As String) Playlist.ToRelative(dir, path))
+            For i As Integer = 0 To (paths.Count - 1)
+                paths(i) = Playlist.ToRelative(dir, paths(i))
+            Next
         End If
         Using output As StreamWriter = My.Computer.FileSystem.OpenTextFileWriter(filepath, false)
             Dim ext As String = Path.GetExtension(filepath)

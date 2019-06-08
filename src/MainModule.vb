@@ -7,8 +7,8 @@ Module MainModule
 
         pls.Load(Console.ReadLine().Trim(""""c))
 
-        For each i In pls
-
+        For each path In pls
+            Console.WriteLine(path)
         Next
 
         Console.ReadKey()
