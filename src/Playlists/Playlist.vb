@@ -107,7 +107,7 @@ Public Class Playlist
     ''' </summary>
     ''' <param name="enumerator">An <c>IEnumerable</c> of filepaths.</param>
     Sub New(ByVal enumerator As IEnumerable(Of String))
-        Me.New(enumerator.ToArray)
+        Add(enumerator.ToArray())
     End Sub
 
     ''' <summary>
@@ -115,9 +115,7 @@ Public Class Playlist
     ''' </summary>
     ''' <param name="paths">An array of filepaths.</param>
     Sub New(ByVal paths As String())
-        For Each path In paths
-            Add(path)
-        Next
+        Add(paths)
     End Sub
 
     ''' <summary>
@@ -202,6 +200,65 @@ Public Class Playlist
     End Function
 
     ''' <summary>
+    ''' Adds a filepath to this playlist, if it does not exist.
+    ''' </summary>
+    ''' <param name="filepath">The filepath to add.</param>
+    Public Sub Add(ByVal filepath As String) Implements ICollection(Of String).Add
+        If (not paths.Contains(filepath)) Then paths.Add(Path.GetFullPath(filepath))
+    End Sub
+
+    ''' <summary>
+    ''' Adds an array of filepaths to this playlist.
+    ''' </summary>
+    ''' <param name="filepaths">The <c>String()</c> of filepaths to add.</param>
+    Public Sub Add(ByVal filepaths As String())
+        For Each filepath In filepaths
+            Add(filepath)
+        Next
+    End Sub
+
+    ''' <summary>
+    ''' Inserts a filepath into a specific part of the playlist.
+    ''' </summary>
+    ''' <param name="index">The index to insert the <paramref name="filepath"/> into.</param>
+    ''' <param name="filepath">The filepath of the sound file to insert.</param>
+    Public Sub Insert(ByVal index As Integer, ByVal filepath As String) Implements IList(Of String).Insert
+        paths.Insert(index, Path.GetFullPath(filepath))
+    End Sub
+
+    ''' <summary>
+    ''' Removes a specific filepath from the playlist.
+    ''' </summary>
+    ''' <param name="filepath">The filepath to remove.</param>
+    Public Function Remove(ByVal filepath As String) As Boolean Implements ICollection(Of String).Remove
+        Return paths.Remove(Path.GetFullPath(filepath))
+    End Function
+    
+    ''' <summary>
+    ''' Searches for the index of a specific filepath in the playlist.
+    ''' </summary>
+    ''' <param name="filepath"></param>
+    ''' <returns></returns>
+    Public Function IndexOf(ByVal filepath As String) As Integer Implements IList(Of String).IndexOf
+        Return paths.IndexOf(Path.GetFullPath(filepath))
+    End Function
+
+    ''' <summary>
+    ''' Removes a filepath from a specific part of the playlist.
+    ''' </summary>
+    ''' <param name="index">The index to remove.</param>
+    Public Sub RemoveAt(ByVal index As Integer) Implements IList(Of String).RemoveAt
+        paths.RemoveAt(index)
+    End Sub
+
+    ''' <summary>
+    ''' Clears the playlist of its current filepaths.
+    ''' </summary>
+    Public Sub Clear() Implements ICollection(Of String).Clear
+        paths.Clear()
+    End Sub
+
+    ''' <summary>
     ''' Implements the iterator for the playlist.
     ''' </summary>
     ''' <returns>An <c>IEnumerator</c> of playlist sound file paths.</returns>
@@ -219,47 +276,6 @@ Public Class Playlist
     Private Function GetEnumeratorB() As IEnumerator Implements IEnumerable.GetEnumerator
         Return GetEnumerator()
     End Function
-
-    ''' <summary>
-    ''' Searches for the index of a specific filepath in the playlist.
-    ''' </summary>
-    ''' <param name="filepath"></param>
-    ''' <returns></returns>
-    Public Function IndexOf(ByVal filepath As String) As Integer Implements IList(Of String).IndexOf
-        Return paths.IndexOf(Path.GetFullPath(filepath))
-    End Function
-
-    ''' <summary>
-    ''' Inserts a filepath into a specific part of the playlist.
-    ''' </summary>
-    ''' <param name="index">The index to insert the <paramref name="filepath"/> into.</param>
-    ''' <param name="filepath">The filepath of the sound file to insert.</param>
-    Public Sub Insert(ByVal index As Integer, ByVal filepath As String) Implements IList(Of String).Insert
-        paths.Insert(index, Path.GetFullPath(filepath))
-    End Sub
-
-    ''' <summary>
-    ''' Removes a filepath from a specific part of the playlist.
-    ''' </summary>
-    ''' <param name="index">The index to remove.</param>
-    Public Sub RemoveAt(ByVal index As Integer) Implements IList(Of String).RemoveAt
-        paths.RemoveAt(index)
-    End Sub
-
-    ''' <summary>
-    ''' Adds a filepath to this playlist.
-    ''' </summary>
-    ''' <param name="filepath">The filepath to add.</param>
-    Public Sub Add(ByVal filepath As String) Implements ICollection(Of String).Add
-        paths.Add(Path.GetFullPath(filepath))
-    End Sub
-
-    ''' <summary>
-    ''' Clears the playlist of its current filepaths.
-    ''' </summary>
-    Public Sub Clear() Implements ICollection(Of String).Clear
-        paths.Clear()
-    End Sub
 
     ''' <summary>
     ''' Returns whether the playlist contains a filepath.
@@ -281,14 +297,6 @@ Public Class Playlist
             arrayIndex += 1
         Next
     End Sub
-
-    ''' <summary>
-    ''' Removes a specific filepath from the playlist.
-    ''' </summary>
-    ''' <param name="filepath">The filepath to remove.</param>
-    Public Function Remove(ByVal filepath As String) As Boolean Implements ICollection(Of String).Remove
-        Return paths.Remove(Path.GetFullPath(filepath))
-    End Function
 
 End Class
 
