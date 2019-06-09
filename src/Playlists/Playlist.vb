@@ -2,6 +2,7 @@
 Imports System.IO.StreamWriter
 Imports System.IO
 Imports System.Reflection
+Imports System.Runtime.CompilerServices
 
 ''' <summary>
 ''' A class which can be used to construct and manage Media Player (Classic) playlist formats.
@@ -105,7 +106,7 @@ Public Class Playlist
     ''' Constructs a playlist from an <c>IEnumerable</c> of filepaths.
     ''' </summary>
     ''' <param name="enumerator">An <c>IEnumerable</c> of filepaths.</param>
-    Sub New(ByVal enumerator As IEnumerable(Of String))
+    Sub New(ByRef enumerator As IEnumerable(Of String))
         Me.New(enumerator.ToArray)
     End Sub
 
@@ -290,3 +291,20 @@ Public Class Playlist
     End Function
 
 End Class
+
+''' <summary>
+''' A module which implements extension methods for the <c>Playlist</c> class.
+''' </summary>
+Friend Module PlaylistExtensions
+    
+    ''' <summary>
+    ''' Attaches to the <c>IEnumerable</c> class to expose a usability function for converting to the <c>Playlist</c> type.
+    ''' </summary>
+    ''' <param name="enumerator">An <c>IEnumerable</c> of filepaths.</param>
+    ''' <returns>A playlist.</returns>
+    <Extension()> 
+    Public Function ToPlaylist(ByRef enumerator As IEnumerable(Of String)) As Playlist
+        Return New Playlist(enumerator)
+    End Function
+
+End Module
