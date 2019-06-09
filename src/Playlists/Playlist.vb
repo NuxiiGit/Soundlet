@@ -25,11 +25,11 @@ Public Class Playlist
     ''' </summary>
     ''' <param name="index">The index to lookup.</param>
     ''' <returns>A filepath found under this index.</returns>
-    Default Public Property Item(index As Integer) As String Implements IList(Of String).Item
+    Default Public Property Item(ByVal index As Integer) As String Implements IList(Of String).Item
         Get
             Return paths(index)
         End Get
-        Set(filepath As String)
+        Set(ByVal filepath As String)
             paths(index) = Path.GetFullPath(filepath)
         End Set
     End Property
@@ -106,7 +106,7 @@ Public Class Playlist
     ''' Constructs a playlist from an <c>IEnumerable</c> of filepaths.
     ''' </summary>
     ''' <param name="enumerator">An <c>IEnumerable</c> of filepaths.</param>
-    Sub New(ByRef enumerator As IEnumerable(Of String))
+    Sub New(ByVal enumerator As IEnumerable(Of String))
         Me.New(enumerator.ToArray)
     End Sub
 
@@ -225,7 +225,7 @@ Public Class Playlist
     ''' </summary>
     ''' <param name="filepath"></param>
     ''' <returns></returns>
-    Public Function IndexOf(filepath As String) As Integer Implements IList(Of String).IndexOf
+    Public Function IndexOf(ByVal filepath As String) As Integer Implements IList(Of String).IndexOf
         Return paths.IndexOf(Path.GetFullPath(filepath))
     End Function
 
@@ -234,7 +234,7 @@ Public Class Playlist
     ''' </summary>
     ''' <param name="index">The index to insert the <paramref name="filepath"/> into.</param>
     ''' <param name="filepath">The filepath of the sound file to insert.</param>
-    Public Sub Insert(index As Integer, filepath As String) Implements IList(Of String).Insert
+    Public Sub Insert(ByVal index As Integer, ByVal filepath As String) Implements IList(Of String).Insert
         paths.Insert(index, Path.GetFullPath(filepath))
     End Sub
 
@@ -242,7 +242,7 @@ Public Class Playlist
     ''' Removes a filepath from a specific part of the playlist.
     ''' </summary>
     ''' <param name="index">The index to remove.</param>
-    Public Sub RemoveAt(index As Integer) Implements IList(Of String).RemoveAt
+    Public Sub RemoveAt(ByVal index As Integer) Implements IList(Of String).RemoveAt
         paths.RemoveAt(index)
     End Sub
 
@@ -250,7 +250,7 @@ Public Class Playlist
     ''' Adds a filepath to this playlist.
     ''' </summary>
     ''' <param name="filepath">The filepath to add.</param>
-    Public Sub Add(filepath As String) Implements ICollection(Of String).Add
+    Public Sub Add(ByVal filepath As String) Implements ICollection(Of String).Add
         paths.Add(Path.GetFullPath(filepath))
     End Sub
 
@@ -266,7 +266,7 @@ Public Class Playlist
     ''' </summary>
     ''' <param name="filepath">The filepath to search for.</param>
     ''' <returns><c>True</c> if the filepath exists and <c>False</c> otherwise.</returns>
-    Public Function Contains(filepath As String) As Boolean Implements ICollection(Of String).Contains
+    Public Function Contains(ByVal filepath As String) As Boolean Implements ICollection(Of String).Contains
         Return paths.Contains(Path.GetFullPath(filepath))
     End Function
 
@@ -275,7 +275,7 @@ Public Class Playlist
     ''' </summary>
     ''' <param name="array">The array to copy the playlist filepaths to.</param>
     ''' <param name="arrayIndex">The starting index.</param>
-    Public Sub CopyTo(array As String(), arrayIndex As Integer) Implements ICollection(Of String).CopyTo
+    Public Sub CopyTo(ByVal  array As String(), ByVal arrayIndex As Integer) Implements ICollection(Of String).CopyTo
         For Each filepath In paths
             array(arrayIndex) = filepath
             arrayIndex += 1
@@ -286,7 +286,7 @@ Public Class Playlist
     ''' Removes a specific filepath from the playlist.
     ''' </summary>
     ''' <param name="filepath">The filepath to remove.</param>
-    Public Function Remove(filepath As String) As Boolean Implements ICollection(Of String).Remove
+    Public Function Remove(ByVal filepath As String) As Boolean Implements ICollection(Of String).Remove
         Return paths.Remove(Path.GetFullPath(filepath))
     End Function
 
@@ -303,7 +303,7 @@ Friend Module PlaylistExtensions
     ''' <param name="enumerator">An <c>IEnumerable</c> of filepaths.</param>
     ''' <returns>A playlist.</returns>
     <Extension()> 
-    Public Function ToPlaylist(ByRef enumerator As IEnumerable(Of String)) As Playlist
+    Public Function ToPlaylist(ByVal enumerator As IEnumerable(Of String)) As Playlist
         Return New Playlist(enumerator)
     End Function
 
