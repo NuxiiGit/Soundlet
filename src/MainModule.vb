@@ -1,4 +1,5 @@
-﻿
+﻿Imports mpc_playlist.Playlist
+
 Module MainModule
 
     Sub Main()

@@ -6,7 +6,7 @@ Imports System.Reflection
 ''' <summary>
 ''' A class which can be used to construct and manage Media Player (Classic) playlist formats.
 ''' </summary>
-Public NotInheritable Class Playlist
+Public Class Playlist
     Implements IList(Of String)
 
     ''' <summary>
