@@ -167,7 +167,7 @@ Public Class Playlist
     ''' </summary>
     ''' <param name="local">The local directory.</param>
     ''' <param name="filepath">The filepath to convert.</param>
-    Private Shared Function ToAbsolute(ByVal local As String, ByVal filepath As String) As String
+    Protected Shared Function ToAbsolute(ByVal local As String, ByVal filepath As String) As String
         Dim dir As String = Directory.GetCurrentDirectory()
         Directory.SetCurrentDirectory(local)
         filepath = Path.GetFullPath(filepath)
@@ -180,7 +180,7 @@ Public Class Playlist
     ''' </summary>
     ''' <param name="local">The local directory.</param>
     ''' <param name="filepath">The filepath to convert.</param>
-    Private Shared Function ToRelative(ByVal local As String, ByVal filepath As String) As String
+    Protected Shared Function ToRelative(ByVal local As String, ByVal filepath As String) As String
         Dim Static delimiter As String = Path.DirectorySeparatorChar
         Dim dir As String = Directory.GetCurrentDirectory()
         Directory.SetCurrentDirectory(local)
