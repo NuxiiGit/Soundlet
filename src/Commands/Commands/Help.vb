@@ -22,10 +22,11 @@ Public Class Help
             Dim width As UInteger = pair.Key.Length
             If (width > maxWidth) Then maxWidth = width
         Next
+        Console.WriteLine()
         For Each pair In Command.Help()
             Dim name As String = pair.Key
             Dim desc As String = pair.Value
-            Dim margin As String = New String(" ", maxWidth - name.Length) & " | "
+            Dim margin As String = New String(" "c, maxWidth - name.Length) & " | "
             Console.WriteLine("  {0}" & margin & "{1}", name, desc)
         Next
     End Sub
