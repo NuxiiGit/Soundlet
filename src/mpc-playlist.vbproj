@@ -84,11 +84,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Playlist.vb" />
-    <Compile Include="PlaylistParsers\ASX.vb" />
-    <Compile Include="PlaylistParsers\M3U.vb" />
-    <Compile Include="PlaylistParsers\MPCPL.vb" />
-    <Compile Include="PlaylistParsers\PLS.vb" />
+    <Compile Include="Playlists\CategoryPlaylist.vb" />
+    <Compile Include="Playlists\Playlist.vb" />
+    <Compile Include="Playlists\PlaylistParsers\ASX.vb" />
+    <Compile Include="Playlists\PlaylistParsers\M3U.vb" />
+    <Compile Include="Playlists\PlaylistParsers\MPCPL.vb" />
+    <Compile Include="Playlists\PlaylistParsers\PLS.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
