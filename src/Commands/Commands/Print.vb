@@ -4,9 +4,6 @@ Imports mpc_playlist.Command
 Public Class Print
     Implements Command.Extension
 
-    ''' <summary>
-    ''' <see cref="Command.Extension.Description"/>
-    ''' </summary>
     Public ReadOnly Property Description As String Implements Extension.Description
         Get
             Return "Lists the contents of a playlist." & _
@@ -15,9 +12,6 @@ Public Class Print
         End Get
     End Property
 
-    ''' <summary>
-    ''' <see cref="Command.Extension.Execute(String())"/>
-    ''' </summary>
     ''' <exception cref="ArgumentException">Thrown when <paramref name="params"/> is empty.</exception>
     Public Sub Execute(ParamArray params() As String) Implements Extension.Execute
         If (params.Length = 0) Then Throw New ArgumentException("You must supply a playlist to print the contents of.")

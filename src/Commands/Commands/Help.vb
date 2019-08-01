@@ -3,18 +3,12 @@
 Public Class Help
     Implements Command.Extension
 
-    ''' <summary>
-    ''' <see cref="Command.Extension.Description"/>
-    ''' </summary>
     Public ReadOnly Property Description As String Implements Extension.Description
         Get
             Return "Lists the help information for all commands."
         End Get
     End Property
 
-    ''' <summary>
-    ''' <see cref="Command.Extension.Execute(String())"/>
-    ''' </summary>
     Public Sub Execute(ParamArray params() As String) Implements Extension.Execute
         If (params.Length() = 0)
             '' list all help information
