@@ -77,6 +77,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\Command.vb" />
+    <Compile Include="Commands\Commands\Help.vb" />
     <Compile Include="Commands\Commands\Print.vb" />
     <Compile Include="Main.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />

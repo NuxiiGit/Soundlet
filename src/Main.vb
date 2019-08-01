@@ -5,7 +5,7 @@ Module Main
 
     Sub Main()
         
-        Command.Parse("print", Console.ReadLine().Trim(""""c))
+        Command.Parse("help")
 
         Dim audio As Id3.Mp3 = New Id3.Mp3(Console.ReadLine().Trim(""""c))
         for each tag in audio.GetAllTags()
