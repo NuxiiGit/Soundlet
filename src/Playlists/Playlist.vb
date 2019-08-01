@@ -162,6 +162,22 @@ Public Class Playlist
     End Sub
 
     ''' <summary>
+    ''' Shuffles the contents of this playlist.
+    ''' </summary>
+    Public Sub Shuffle()
+        Dim rand As Random = New Random()
+        Dim max As Integer = paths.Count - 1
+        For i As Integer = 0 To max
+            Dim j As Integer = rand.Next(i, max)
+            If (i <> j)
+                Dim temp As String = paths(i)
+                paths(i) = paths(j)
+                paths(j) = temp
+            End If
+        Next
+    End Sub
+
+    ''' <summary>
     ''' Converts a filepath to an absolute representation.
     ''' </summary>
     ''' <param name="local">The local directory.</param>
