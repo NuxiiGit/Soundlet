@@ -131,7 +131,7 @@ Public Class Playlist
             '' compile paths
             Dim ext As String = Path.GetExtension(filepath).ToUpper()
             If (Not extensions.ContainsKey(ext)) Then Throw New _
-                    KeyNotFoundException(String.Format("Unknown playlist file extension {0}.", ext))
+                    KeyNotFoundException(String.Format("Unknown playlist file extension {0}", ext))
             Dim dir As String = Path.GetDirectoryName(filepath)
             For Each path As String In extensions(ext).Decode(input)
                 paths.Add(Playlist.ToAbsolute(dir, path))
@@ -154,9 +154,9 @@ Public Class Playlist
             Next
         End If
         Using output As StreamWriter = My.Computer.FileSystem.OpenTextFileWriter(filepath, false)
-            Dim ext As String = Path.GetExtension(filepath)
+            Dim ext As String = Path.GetExtension(filepath).ToUpper()
             If (Not extensions.ContainsKey(ext)) Then Throw New _
-                    KeyNotFoundException(String.Format("Unknown playlist file extension {0}.", ext))
+                    KeyNotFoundException(String.Format("Unknown playlist file extension {0}", ext))
             extensions(ext).Encode(output, outputPaths)
         End Using
     End Sub
