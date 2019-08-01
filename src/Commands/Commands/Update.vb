@@ -18,36 +18,33 @@ Public Class Update
         If (params.Length = 0) Then Throw New ArgumentException("You must supply a playlist to update the contents of.")
         Dim path As String = params(0)
         Dim playlist As Playlist = New Playlist(path)
-        Dim iter As LinkedList(Of String) = New LinkedList(Of String)(params)
-        '' iterate through parameters
+        Dim values As List(Of String) = New List(Of String)(params)
+        values.RemoveAt(0)
         Dim relative As Boolean = False
-        Dim x As LinkedListNode(Of String) = iter.First.Next
-        While (x IsNot Nothing) 
-            Dim attribute As String = x.Value
-            x = x.Next
-            Select attribute
+        Dim attribute As String = Nothing
+        For Each value In values
+            Select value
             Case "--absolute":
                 '' make the playlist absolute
                 relative = False
             Case "--relative":
+                '' make the playlist relative
                 relative = True
-            Case "-add":
-                While ((x IsNot Nothing) AndAlso (Not {"--absolute", "--relative", "-add", "-del"}.Contains(x.Value)))
-                    '' add x to the playlist
-                    Console.WriteLine(x.Value)
-                    playlist.Add(x.Value)
-                    x = x.Next
-                End While
-            Case "-del":
-                While ((x IsNot Nothing) AndAlso (Not {"--absolute", "--relative", "-add", "-del"}.Contains(x.Value)))
-                    '' remove x from the playlist
-                    playlist.Remove(x.Value)
-                    x = x.Next
-                End While
+            Case "-add", "-del":
+                attribute = value
             Case Else:
-                Throw New ArgumentException("Expected one of: '--absolute,' '--relative,' '-add,' '-del.' Got: '" & attribute & ".'")
+                Select attribute
+                Case "-add":
+                    '' add value to playlist
+                    playlist.Add(value)
+                Case "-del":
+                    '' remove value from playlist
+                    playlist.Remove(value)
+                Case Else:
+                    Throw New ArgumentException("Expected one of: '--absolute,' '--relative,' '-add,' '-del.' Got: '" & attribute & ".'")
+                End Select
             End Select
-        End While
+        Next
         playlist.Save(path, relative)
     End Sub
 
