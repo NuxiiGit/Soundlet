@@ -166,9 +166,9 @@ Public Class Playlist
     ''' </summary>
     Public Sub Shuffle()
         Dim rand As Random = New Random()
-        Dim max As Integer = paths.Count - 1
-        For i As Integer = 0 To max
-            Dim j As Integer = rand.Next(i, max)
+        Dim count As Integer = paths.Count
+        For i As Integer = 0 To (count - 1)
+            Dim j As Integer = rand.Next(i, count)
             If (i <> j)
                 Dim temp As String = paths(i)
                 paths(i) = paths(j)
