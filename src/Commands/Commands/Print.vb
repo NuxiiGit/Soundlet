@@ -17,7 +17,7 @@ Public Class Print
         If (params.Length = 0) Then Throw New ArgumentException("You must supply a playlist to print the contents of.")
         Dim playlist As Playlist = New Playlist(params(0))
         For i As Integer = 0 To (playlist.Count - 1)
-            Console.WriteLine("Track #{0}: {1}", i, playlist(i))
+            Console.WriteLine(" - " & playlist(i))
         Next
     End Sub
 
