@@ -17,17 +17,25 @@ Public Class Help
     ''' </summary>
     ''' <exception cref="ArgumentException">Thrown when <paramref name="params"/> is empty.</exception>
     Public Sub Execute(ParamArray params() As String) Implements Extension.Execute
-        Dim maxWidth As UInteger = 0
+        Const PADDING As Integer = 2
+        Dim longestLength As UInteger = 0
         For Each pair In Command.Help()
-            Dim width As UInteger = pair.Key.Length
-            If (width > maxWidth) Then maxWidth = width
+            Dim length As UInteger = pair.Key.Length
+            If (length > longestLength) Then longestLength = length
         Next
         Console.WriteLine()
         For Each pair In Command.Help()
             Dim name As String = pair.Key
             Dim desc As String = pair.Value
-            Dim margin As String = New String(" "c, maxWidth - name.Length) & " | "
-            Console.WriteLine("  {0}" & margin & "{1}", name, desc)
+            Dim margin As String = New String(" ", PADDING) & name & New String(" "c, longestLength - name.Length) & " | "
+            Dim summary As String = If(
+                    desc.Contains(Environment.NewLine),
+                    desc.Split(Environment.NewLine)(0),
+                    desc)
+            Dim trail As String = " ..."
+            Dim contentWidth As Integer = Console.BufferWidth - PADDING - margin.Length - trail.Length
+            If (summary.Length > contentWidth) Then summary = summary.Substring(0, contentWidth) & trail
+            Console.WriteLine(margin & summary)
         Next
     End Sub
 
