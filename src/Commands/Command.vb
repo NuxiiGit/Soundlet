@@ -1,4 +1,6 @@
-﻿''' <summary>
+﻿Imports System.Reflection
+
+''' <summary>
 ''' A modules which provides a command <see cref="Command.Extension"/> interface and procedures for parsing and executing these commands.
 ''' </summary>
 Public Module Command
@@ -44,6 +46,9 @@ Public Module Command
     ''' Parses a single command.
     ''' </summary>
     ''' <param name="args"></param>
+    ''' <exception cref="ArgumentNullException">Thrown if <paramref name="args"/> is <c>Nothing</c>.</exception>
+    ''' <exception cref="ArgumentException">Thrown if <paramref name="args"/> is empty.</exception>
+    ''' <exception cref="KeyNotFoundException">Thrown if this command does not exist.</exception>
     Public Sub Parse(ByVal ParamArray args As String())
         If (args Is Nothing) Then Throw New ArgumentNullException("Args must not be Nothing!")
         If (args.Length = 0) Then Throw New ArgumentException("Args must not be empty!")

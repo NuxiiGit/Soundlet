@@ -1,9 +1,12 @@
 ﻿Imports mpc_playlist.Playlist
+Imports mpc_playlist.Command
 
 Module Main
 
     Sub Main()
         
+        Command.Parse("test", "x")
+
         Dim audio As Id3.Mp3 = New Id3.Mp3(Console.ReadLine().Trim(""""c))
         for each tag in audio.GetAllTags()
             dim artists As String = tag.Artists
