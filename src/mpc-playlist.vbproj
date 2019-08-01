@@ -80,6 +80,7 @@
     <Compile Include="Commands\Commands\Help.vb" />
     <Compile Include="Commands\Commands\Print.vb" />
     <Compile Include="Commands\Commands\Shuffle.vb" />
+    <Compile Include="Commands\Commands\Update.vb" />
     <Compile Include="Main.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
