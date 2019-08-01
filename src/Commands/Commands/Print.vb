@@ -9,7 +9,9 @@ Public Class Print
     ''' </summary>
     Public ReadOnly Property Description As String Implements Extension.Description
         Get
-            Return "Use 'print <playlist>' to print the contents of 'playlist.'"
+            Return "Lists the contents of a playlist." & _
+                    Environment.NewLine & _
+                    Environment.NewLine & "Use 'print <playlist>' to print the contents of 'playlist.'"
         End Get
     End Property
 

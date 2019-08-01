@@ -9,7 +9,9 @@ Public Class Shuffle
     ''' </summary>
     Public ReadOnly Property Description As String Implements Extension.Description
         Get
-            Return "Use 'shuffle <playlist>' to shuffle the contents of 'playlist.'"
+            Return "Shuffles the contents of a playlist." & _
+                    Environment.NewLine & _
+                    Environment.NewLine & "Use 'shuffle <playlist>' to shuffle the contents of 'playlist.'"
         End Get
     End Property
 
