@@ -72,4 +72,15 @@ Public Module Command
         Next
     End Function
 
+    ''' <summary>
+    ''' Returns help information of a specific command.
+    ''' </summary>
+    ''' <returns>The description of this command.</returns>
+    ''' <exception cref="KeyNotFoundException">Thrown if this command does not exist.</exception>
+    Public Function Help(ByVal name As String) As String
+        If (Not extensions.ContainsKey(name)) Then _
+                Throw New KeyNotFoundException("Command '" & name & "' does not exist!")
+        Return extensions(name).Description
+    End Function
+
 End Module
