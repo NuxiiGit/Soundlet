@@ -47,6 +47,14 @@ Public Class Build
                 End Select
             End Select
         Next
+        If (attribute = "--append")
+            Try 
+                playlist.Load(path)
+            Catch e As IO.IOException
+                Console.WriteLine("There was an error opening the playlist for append.")
+            End Try
+        End If
+        playlist.Save(path, False)
     End Sub
 
 End Class
