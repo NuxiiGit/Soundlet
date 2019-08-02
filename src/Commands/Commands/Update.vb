@@ -6,7 +6,7 @@ Public Class Update
 
     Public ReadOnly Property Description As String Implements Extension.Description
         Get
-            Return "Adds or removes contents of a playlist" & _
+            Return "Adds or removes contents of a playlist." & _
                     Environment.NewLine & Environment.NewLine & "The full syntax of this command is: 'update <playlist> [--absolute/relative] [-add <files>] [-del <files>]'" & _
                     Environment.NewLine & Environment.NewLine & "Use 'update <playlist> --absolute' to force all filepaths to be absolute paths. Alternatively, use 'update <playlist> --relative' to make all filepaths become relative to the playlist file; this is useful when there is a strong bond between your playlist files and your audio files." & _
                     Environment.NewLine & Environment.NewLine & "Use 'update <playlist> --add file1 [file2] [...]' to add a list of audio files to the playlist. The same can be done for deletion: use 'update <playlist> --del file1 [file2] [...]' to remove a list of audio files to the playlist."
