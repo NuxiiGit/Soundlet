@@ -30,6 +30,24 @@ Public Class Build
             mask = mask.Remove(0, 2) '' remove ./ delimiter
             root = Path.GetDirectoryName(root)
         End While
+        Dim files As List(Of String) = New List(Of String)
+        Dim dirQueue As Queue(Of String) = New Queue(Of String)()
+        dirQueue.Enqueue(root)
+        While (dirQueue.Count > 0)
+            Dim dir As String = dirQueue.Dequeue()
+            '' add additional directories
+            For Each subDir In Directory.GetDirectories(dir)
+                Console.WriteLine("Sub-directory: " & Path.GetFileName(subDir))
+                dirQueue.Enqueue(subDir)
+            Next
+            '' get files
+            For Each file As String In Directory.GetFiles(dir)
+                If file Like mask
+                    Console.WriteLine("  File: " & file)
+                    files.Add(file)
+                End If
+            Next
+        End While
         '' build playlist
         Dim playlist As Playlist = New Playlist()
         Dim attributes As List(Of String) = New List(Of String)(params)
