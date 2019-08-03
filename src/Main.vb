@@ -18,6 +18,8 @@ Module Main
             Console.Write("ERROR")
             Console.ResetColor()
             Console.WriteLine(": " & e.Message)
+            Console.WriteLine()
+            Console.WriteLine(e.StackTrace)
         End Try
     End Sub
 
