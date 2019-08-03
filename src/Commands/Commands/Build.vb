@@ -1,5 +1,6 @@
 ﻿Imports mpc_playlist.Playlist
 Imports mpc_playlist.Command
+Imports System.IO
 Imports Id3
 
 Public Class Build
@@ -21,8 +22,15 @@ Public Class Build
     Public Sub Execute(ParamArray params() As String) Implements Extension.Execute
         If (params.Length = 0) Then Throw New ArgumentException("You must supply a playlist to update the contents of.")
         If (params.Length = 1) Then Throw New ArgumentException("You must supply a file mask to match files.")
-        Dim path As String = params(0)
+        '' compile a list of file paths which match the file mask
         Dim mask As String = params(1)
+        Dim root As String = Directory.GetCurrentDirectory() _
+                .Replace("\"c, "/"c)
+        While (mask.IndexOf("./") = 0)
+            mask = mask.Remove(0, 2) '' remove ./ delimiter
+            root = Path.GetDirectoryName(root)
+        End While
+        '' build playlist
         Dim playlist As Playlist = New Playlist()
         Dim attributes As List(Of String) = New List(Of String)(params)
         attributes.RemoveAt(0) '' remove path
@@ -47,14 +55,15 @@ Public Class Build
                 End Select
             End Select
         Next
+        Dim dest As String = params(0)
         If (lastAttribute = "--append")
             Try 
-                playlist.Load(path)
+                playlist.Load(dest)
             Catch e As IO.IOException
                 Console.WriteLine("There was an error opening the playlist for append.")
             End Try
         End If
-        playlist.Save(path, False)
+        playlist.Save(dest, False)
     End Sub
 
 End Class
