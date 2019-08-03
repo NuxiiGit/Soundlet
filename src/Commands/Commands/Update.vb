@@ -18,27 +18,27 @@ Public Class Update
         If (params.Length = 0) Then Throw New ArgumentException("You must supply a playlist to update the contents of.")
         Dim path As String = params(0)
         Dim playlist As Playlist = New Playlist(path)
-        Dim values As List(Of String) = New List(Of String)(params)
-        values.RemoveAt(0)
-        Dim attribute As String = Nothing
-        For Each value In values
-            Select value
+        Dim attributes As List(Of String) = New List(Of String)(params)
+        attributes.RemoveAt(0)
+        Dim lastAttribute As String = Nothing
+        For Each attribute In attributes
+            Select attribute
             Case "-add", "-del", "--absolute", "--relative":
-                attribute = value
+                lastAttribute = attribute
             Case Else:
-                Select attribute
+                Select lastAttribute
                 Case "-add":
                     '' add value to playlist
-                    playlist.Add(value)
+                    playlist.Add(attribute)
                 Case "-del":
                     '' remove value from playlist
-                    playlist.Remove(value)
+                    playlist.Remove(attribute)
                 Case Else:
                     Throw New ArgumentException("Expected one of: '--absolute,' '--relative,' '-add,' '-del.' Got: '" & attribute & ".'")
                 End Select
             End Select
         Next
-        playlist.Save(path, attribute = "--relative")
+        playlist.Save(path, lastAttribute = "--relative")
     End Sub
 
 End Class

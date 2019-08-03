@@ -24,16 +24,16 @@ Public Class Build
         Dim path As String = params(0)
         Dim mask As String = params(1)
         Dim playlist As Playlist = New Playlist()
-        Dim values As List(Of String) = New List(Of String)(params)
-        values.RemoveAt(0) '' remove path
-        values.RemoveAt(0) '' remove mask
-        Dim attribute As String = Nothing
-        For Each value In values
-            Select value
+        Dim attributes As List(Of String) = New List(Of String)(params)
+        attributes.RemoveAt(0) '' remove path
+        attributes.RemoveAt(0) '' remove mask
+        Dim lastAttribute As String = Nothing
+        For Each attribute In attributes
+            Select attribute
             Case "-rating", "-genres", "-artists", "-album", "--append":
-                attribute = value
+                lastAttribute = attribute
             Case Else:
-                Select attribute
+                Select lastAttribute
                 Case "-rating":
                     '' filter out ratings
                 Case "-genres":
@@ -47,7 +47,7 @@ Public Class Build
                 End Select
             End Select
         Next
-        If (attribute = "--append")
+        If (lastAttribute = "--append")
             Try 
                 playlist.Load(path)
             Catch e As IO.IOException
