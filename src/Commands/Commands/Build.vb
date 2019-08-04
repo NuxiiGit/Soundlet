@@ -40,10 +40,7 @@ Public Class Build
             Next
             '' get files
             For Each file As String In Directory.GetFiles(dir)
-                If file Like mask
-                    Console.WriteLine("  File: " & file)
-                    files.Add(file)
-                End If
+                If file Like mask Then files.Add(file)
             Next
         End While
         '' build playlist
@@ -60,7 +57,7 @@ Public Class Build
                 Select lastAttribute
                 Case "-genres":
                     '' filter out genres
-                    For Each file In files
+                    For Each file In files.ToArray '' I use .ToArray to create a duplicate enumerable since I modify the files list in the loop
                         Dim genres As String() = Nothing
                         If (Path.GetExtension(file) = ".mp3")
                             Using mp3 As New Mp3(file)
@@ -73,7 +70,7 @@ Public Class Build
                                 Next
                             End Using
                         End If
-                        If (genres IsNot Nothing AndAlso Not genres.Contains(attribute)) Then playlist.Remove(file)
+                        If (genres Is Nothing OrElse Not genres.Contains(attribute)) Then files.Remove(file)
                     Next
                 Case "-artists":
                     '' filter out artists
@@ -92,6 +89,7 @@ Public Class Build
         End If
         '' write to the playlist
         For Each file In files
+            Console.WriteLine(" - Adding File: " & file)
             playlist.Add(file)
         Next
         playlist.Save(dest, False)
