@@ -81,6 +81,10 @@ Public Class Build
                 Console.WriteLine("There was an error opening the playlist for append.")
             End Try
         End If
+        '' write to the playlist
+        For Each file In files
+            playlist.Add(file)
+        Next
         playlist.Save(dest, False)
     End Sub
 
