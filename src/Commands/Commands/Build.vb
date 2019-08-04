@@ -60,6 +60,21 @@ Public Class Build
                 Select lastAttribute
                 Case "-genres":
                     '' filter out genres
+                    For Each file In files
+                        Dim genres As String() = Nothing
+                        If (Path.GetExtension(file) = ".mp3")
+                            Using mp3 As New Mp3(file)
+                                For Each tag In mp3.GetAllTags()
+                                     genres = tag _
+                                            .Genre _
+                                            .ToString() _
+                                            .Split("/"c)
+                                     If (genres IsNot Nothing) Then Exit For
+                                Next
+                            End Using
+                        End If
+                        If (genres IsNot Nothing AndAlso Not genres.Contains(attribute)) Then playlist.Remove(file)
+                    Next
                 Case "-artists":
                     '' filter out artists
                 Case Else:
