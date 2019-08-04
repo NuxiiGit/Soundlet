@@ -11,10 +11,8 @@ Public Class Build
             Return "Builds a new playlist from a directory of files." & _
                     Environment.NewLine & Environment.NewLine & "The full syntax of this command is: 'build <destination> <file-mask> [-mask <mask>] [-rating <amount>] [-genres <genres>] [-artists <artists>] [-album <album>] [--append]'" & _
                     Environment.NewLine & Environment.NewLine & "Use 'build <playlist> <file-mask>' to build a playlist containing files relative to the current directory which satisfy the file mask 'file-mask.' Masks follow the usual mask syntax." & _
-                    Environment.NewLine & Environment.NewLine & "Use 'build <playlist> <file-mask> -rating <amount>' to build a playlist where each audio file must exceed a minimum rating of 'amount.'" & _
                     Environment.NewLine & Environment.NewLine & "Use 'build <playlist> <file-mask> -genres <genre>' to build a playlist where each audio file is of a certain genre 'genre.'" & _
-                    Environment.NewLine & Environment.NewLine & "Use 'build <playlist> <file-mask> -artists <artist>' to build a playlist where each audio file contans a certain artist 'artist.'" & _
-                    Environment.NewLine & Environment.NewLine & "Use 'build <playlist> <file-mask> -album <album>' to build a playlist where each audio file is part of a certain album 'album.'"
+                    Environment.NewLine & Environment.NewLine & "Use 'build <playlist> <file-mask> -artists <artist>' to build a playlist where each audio file contans a certain artist 'artist.'"
         End Get
     End Property
 
@@ -56,20 +54,16 @@ Public Class Build
         Dim lastAttribute As String = Nothing
         For Each attribute In attributes
             Select attribute
-            Case "-rating", "-genres", "-artists", "-album", "--append":
+            Case "-genres", "-artists", "--append":
                 lastAttribute = attribute
             Case Else:
                 Select lastAttribute
-                Case "-rating":
-                    '' filter out ratings
                 Case "-genres":
                     '' filter out genres
                 Case "-artists":
                     '' filter out artists
-                Case "-album":
-                    '' filter out albums
                 Case Else:
-                    Throw New ArgumentException("Expected one of: '--append,' '-rating,' '-genres,' '-artists,' '-album.' Got: '" & attribute & ".'")
+                    Throw New ArgumentException("Expected one of: '--append,' '-genres,' '-artists.' Got: '" & attribute & ".'")
                 End Select
             End Select
         Next
