@@ -21,9 +21,12 @@ Public Class Build
         If (params.Length = 0) Then Throw New ArgumentException("You must supply a playlist to update the contents of.")
         If (params.Length = 1) Then Throw New ArgumentException("You must supply a file mask to match files.")
         '' compile a list of file paths which match the file mask
-        Dim mask As String = params(1)
+        Dim mask As String = params(1) _
+                .Replace("\"c, "/"c) _
+                .Replace("/"c, Path.DirectorySeparatorChar)
         Dim root As String = Directory.GetCurrentDirectory() _
-                .Replace("\"c, "/"c)
+                .Replace("\"c, "/"c) _
+                .Replace("/"c, Path.DirectorySeparatorChar)
         While (mask.IndexOf("../") = 0)
             mask = mask.Remove(0, 2) '' remove ../ delimiter
             root = Path.GetDirectoryName(root)
@@ -40,7 +43,10 @@ Public Class Build
             Next
             '' get files
             For Each file As String In Directory.GetFiles(dir)
-                If file Like mask Then files.Add(file)
+                If (file Like mask)
+                    Console.WriteLine(" * Matching File: " & Path.GetFileName(file))
+                    files.Add(file)
+                End If
             Next
         End While
         '' build playlist
@@ -104,7 +110,7 @@ Public Class Build
         End If
         '' write to the playlist
         For Each file In files
-            Console.WriteLine(" - Adding File: " & file)
+            Console.WriteLine(" - Adding File: " & Path.GetFileName(file))
             playlist.Add(file)
         Next
         playlist.Save(dest, False)
