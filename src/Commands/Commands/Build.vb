@@ -57,7 +57,8 @@ Public Class Build
                 Select lastAttribute
                 Case "-genres":
                     '' filter out genres
-                    For Each file In files.ToArray '' I use .ToArray to create a duplicate enumerable since I modify the files list in the loop
+                    For i As Integer = (files.Count - 1) To 0
+                        Dim file As String = files(i)
                         Dim genres As String() = Nothing
                         If (Path.GetExtension(file) = ".mp3")
                             Using mp3 As New Mp3(file)
@@ -74,6 +75,7 @@ Public Class Build
                     Next
                 Case "-artists":
                     '' filter out artists
+                    
                 Case Else:
                     Throw New ArgumentException("Expected one of: '--append,' '-genres,' '-artists.' Got: '" & attribute & ".'")
                 End Select
