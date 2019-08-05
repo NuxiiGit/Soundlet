@@ -43,7 +43,7 @@ Public Class Build
             Next
             '' get files
             For Each file As String In Directory.GetFiles(dir)
-                If (file Like mask)
+                If (file.Replace(root, "") Like mask)
                     Console.WriteLine(" * Matching File: " & Path.GetFileName(file))
                     files.Add(file)
                 End If
@@ -110,7 +110,7 @@ Public Class Build
         End If
         '' write to the playlist
         For Each file In files
-            Console.WriteLine(" - Adding File: " & Path.GetFileName(file))
+            ''Console.WriteLine(" - Adding File: " & Path.GetFileName(file))
             playlist.Add(file)
         Next
         playlist.Save(dest, False)
