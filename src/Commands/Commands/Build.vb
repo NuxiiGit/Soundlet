@@ -24,8 +24,8 @@ Public Class Build
         Dim mask As String = params(1)
         Dim root As String = Directory.GetCurrentDirectory() _
                 .Replace("\"c, "/"c)
-        While (mask.IndexOf("./") = 0)
-            mask = mask.Remove(0, 2) '' remove ./ delimiter
+        While (mask.IndexOf("../") = 0)
+            mask = mask.Remove(0, 2) '' remove ../ delimiter
             root = Path.GetDirectoryName(root)
         End While
         Dim files As List(Of String) = New List(Of String)
@@ -80,7 +80,7 @@ Public Class Build
                         If (Path.GetExtension(file) = ".mp3")
                             Using mp3 As New Mp3(file)
                                 For Each tag In mp3.GetAllTags() 
-                                    artists = tag.Genre
+                                    artists = tag.Artists
                                     Exit For
                                 Next
                             End Using
