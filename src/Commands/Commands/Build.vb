@@ -63,7 +63,7 @@ Public Class Build
                 Select lastAttribute
                 Case "-genres":
                     '' filter out genres
-                    For i As Integer = (files.Count - 1) To 0
+                    For i As Integer = (files.Count - 1) To 0 Step -1
                         Dim file As String = files(i)
                         Dim genres As String = ""
                         If (Path.GetExtension(file) = ".mp3")
@@ -80,7 +80,7 @@ Public Class Build
                     Next
                 Case "-artists":
                     '' filter out artists
-                    For i As Integer = (files.Count - 1) To 0
+                    For i As Integer = (files.Count - 1) To 0 Step -1
                         Dim file As String = files(i)
                         Dim artists As String = ""
                         If (Path.GetExtension(file) = ".mp3")
@@ -110,7 +110,7 @@ Public Class Build
         End If
         '' write to the playlist
         For Each file In files
-            ''Console.WriteLine(" - Adding File: " & Path.GetFileName(file))
+            Console.WriteLine(" - Adding File: " & Path.GetFileName(file))
             playlist.Add(file)
         Next
         playlist.Save(dest, False)
