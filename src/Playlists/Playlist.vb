@@ -125,6 +125,8 @@ Public Class Playlist
     ''' <exception cref="IOException">Thrown when there was an error loading the file contents.</exception>
     ''' <exception cref="KeyNotFoundException">Thrown when the file extension for <paramref name="filepath"/> is not supported.</exception>
     Public Sub Load(ByVal filepath As String)
+        filepath = GetFullPath(filepath)
+        Console.WriteLine("path: " & filepath)
         If (Not File.Exists(filepath)) Then Throw New IOException("Playlist file does not exist.")
         Using input As StreamReader = My.Computer.FileSystem.OpenTextFileReader(filepath)
             If (input.EndOfStream) Then Throw New IOException("Playlist file cannot be empty.")
@@ -145,6 +147,7 @@ Public Class Playlist
     ''' <param name="filepath">The path of the playlist file.</param>
     ''' <exception cref="KeyNotFoundException">Thrown when the file extension for <paramref name="filepath"/> is not supported.</exception>
     Public Sub Save(ByVal filepath As String, Optional ByVal relative As Boolean = False)
+        filepath = GetFullPath(filepath)
         Dim outputPaths As String() = paths.ToArray()
         If (relative)
             '' convert the paths to be relative to 'filepath'
@@ -213,6 +216,18 @@ Public Class Playlist
         Loop
         Directory.SetCurrentDirectory(dir)
         Return filepath
+    End Function
+
+    Protected Shared Function GetFullPath(ByVal filepath As String) As String
+        Dim newPath As String = filepath
+        If (Not Path.IsPathRooted(filepath))
+            newPath = Path.GetFullPath(filepath)
+            If (Not Path.IsPathRooted(newPath))
+                '' this condition is met if the filepath did not have a leading `./`
+                newPath = Path.GetFullPath("./" & filepath)
+            End If
+        End If
+        Return newPath
     End Function
 
     ''' <summary>

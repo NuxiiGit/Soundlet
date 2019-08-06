@@ -104,7 +104,7 @@ Public Class Build
         If (lastAttribute = "--append")
             Try 
                 playlist.Load(dest)
-            Catch e As IO.IOException
+            Catch e As IOException
                 Console.WriteLine("There was an error opening the playlist for append.")
             End Try
         End If

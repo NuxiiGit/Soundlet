@@ -17,7 +17,7 @@ Module Main
             Console.ForegroundColor = ConsoleColor.DarkRed
             Console.Write("ERROR")
             Console.ResetColor()
-            Console.WriteLine(": " & e.Message)
+            Console.WriteLine("({0}): {1}", e.GetType.ToString(), e.Message)
             Console.WriteLine()
             Console.WriteLine(e.StackTrace)
         End Try
