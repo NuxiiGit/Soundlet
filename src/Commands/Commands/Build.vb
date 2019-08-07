@@ -54,11 +54,11 @@ Public Class Build
         Dim lastAttribute As String = Nothing
         For Each attribute In attributes
             Select attribute
-            Case "-genres", "-artists", "--append":
+            Case "-genres", "-genre", "-artists", "-artist", "--append":
                 lastAttribute = attribute
             Case Else:
                 Select lastAttribute
-                Case "-genres":
+                Case "-genres", "-genre":
                     '' filter out genres
                     For i As Integer = (files.Count - 1) To 0 Step -1
                         Dim file As String = files(i)
@@ -75,7 +75,7 @@ Public Class Build
                                 .Split("/"c) _
                                 .Contains(attribute)) Then files.Remove(file)
                     Next
-                Case "-artists":
+                Case "-artists", "-artist":
                     '' filter out artists
                     For i As Integer = (files.Count - 1) To 0 Step -1
                         Dim file As String = files(i)
@@ -93,7 +93,7 @@ Public Class Build
                                 .Contains(attribute)) Then files.Remove(file)
                     Next
                 Case Else:
-                    Throw New ArgumentException("Expected one of: '--append,' '-genres,' '-artists.' Got: '" & attribute & ".'")
+                    Throw New ArgumentException("Expected one of: '--append,' '-genre,' '-artist.' Got: '" & attribute & ".'")
                 End Select
             End Select
         Next
