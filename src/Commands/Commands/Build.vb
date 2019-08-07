@@ -43,10 +43,7 @@ Public Class Build
             Next
             '' get files
             For Each file As String In Directory.GetFiles(dir)
-                If (file.Replace(root, "") Like mask)
-                    Console.WriteLine(" * Matching File: " & Path.GetFileName(file))
-                    files.Add(file)
-                End If
+                If (file.Replace(root, "") Like mask) Then files.Add(file)
             Next
         End While
         '' build playlist
@@ -74,7 +71,7 @@ Public Class Build
                                 Next
                             End Using
                         End If
-                        If (Not genres _
+                        If (genres Is Nothing OrElse Not genres _
                                 .Split("/"c) _
                                 .Contains(attribute)) Then files.Remove(file)
                     Next
@@ -91,7 +88,7 @@ Public Class Build
                                 Next
                             End Using
                         End If
-                        If (Not artists _
+                        If (artists Is Nothing OrElse Not artists _
                                 .Split("/"c) _
                                 .Contains(attribute)) Then files.Remove(file)
                     Next
