@@ -104,7 +104,7 @@ Public Class Build
                         If (album <> attribute) Then files.Remove(file)
                     Next
                 Case Else:
-                    Throw New ArgumentException("Expected one of: '--append,' '-genre,' '-artist.' Got: '" & attribute & ".'")
+                    Throw New ArgumentException("Expected one of: '--append,' '-genre,' '-artist,' '-album.' Got: '" & attribute & ".'")
                 End Select
             End Select
         Next
