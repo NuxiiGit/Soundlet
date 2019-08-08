@@ -62,35 +62,31 @@ Public Class Build
                     '' filter out genres
                     For i As Integer = (files.Count - 1) To 0 Step -1
                         Dim file As String = files(i)
-                        Dim genres As String = ""
+                        Dim genres As String() = {}
                         If (Path.GetExtension(file) = ".mp3")
                             Using mp3 As New Mp3(file)
                                 For Each tag In mp3.GetAllTags() 
-                                    genres = tag.Genre
+                                    genres = tag.Genre.ToString().Split("/"c)
                                     Exit For
                                 Next
                             End Using
                         End If
-                        If (genres Is Nothing OrElse Not genres _
-                                .Split("/"c) _
-                                .Contains(attribute)) Then files.Remove(file)
+                        If (Not genres.Contains(attribute)) Then files.Remove(file)
                     Next
                 Case "-artists", "-artist":
                     '' filter out artists
                     For i As Integer = (files.Count - 1) To 0 Step -1
                         Dim file As String = files(i)
-                        Dim artists As String = ""
+                        Dim artists As String() = {}
                         If (Path.GetExtension(file) = ".mp3")
                             Using mp3 As New Mp3(file)
                                 For Each tag In mp3.GetAllTags() 
-                                    artists = tag.Artists
+                                    artists = tag.Artists.ToString().Split("/"c)
                                     Exit For
                                 Next
                             End Using
                         End If
-                        If (artists Is Nothing OrElse Not artists _
-                                .Split("/"c) _
-                                .Contains(attribute)) Then files.Remove(file)
+                        If (Not artists.Contains(attribute)) Then files.Remove(file)
                     Next
                 Case Else:
                     Throw New ArgumentException("Expected one of: '--append,' '-genre,' '-artist.' Got: '" & attribute & ".'")
