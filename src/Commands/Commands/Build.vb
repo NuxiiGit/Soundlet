@@ -88,6 +88,21 @@ Public Class Build
                         End If
                         If (Not artists.Contains(attribute)) Then files.Remove(file)
                     Next
+                Case "-album":
+                    '' filter out albums
+                    For i As Integer = (files.Count - 1) To 0 Step -1
+                        Dim file As String = files(i)
+                        Dim album As String = ""
+                        If (Path.GetExtension(file) = ".mp3")
+                            Using mp3 As New Mp3(file)
+                                For Each tag In mp3.GetAllTags() 
+                                    album = tag.Album
+                                    Exit For
+                                Next
+                            End Using
+                        End If
+                        If (album <> attribute) Then files.Remove(file)
+                    Next
                 Case Else:
                     Throw New ArgumentException("Expected one of: '--append,' '-genre,' '-artist.' Got: '" & attribute & ".'")
                 End Select
