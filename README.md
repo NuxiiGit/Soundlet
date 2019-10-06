@@ -2,7 +2,18 @@
 
 This repository contains the source code for `mpc-pls`; a command-line tool which can be used to automatically build and edit Media Player playlist files.
 
-## Supported Playlist Formats
+## Features
+
+The following commands can be used by typing `mpc-pls <command> [args]`.
+ 
+ - `build` for building a new playlist from a directory of files.
+ - `print` for listing the contents of a playlist file.
+ - `shuffle` for shuffling a playlist file.
+ - `update` for adding or removing files from a playlist file.
+
+For more information on a specific command use `mpc-pls help <command>`.
+
+### Supported Playlist Formats
 
 The tool currently supports the following playlist formats:
 
@@ -14,17 +25,6 @@ The tool currently supports the following playlist formats:
 ### Why the Name?
 
 I named it `mpc-pls` because originally it only supported the `.mpcpl` (Media Player *Classic* PlayList) format. I've expanded the available range to the ones Media Player Classic natively exports to.
-
-## Features
-
-The following commands can be used by typing `mpc-pls <command> [args]`.
- 
- - `build` for building a new playlist from a directory of files.
- - `print` for listing the contents of a playlist file.
- - `shuffle` for shuffling a playlist file.
- - `update` for adding or removing files from a playlist file.
-
-For more information on a specific command use `mpc-pls help <command>`.
 
 ## Downloads
 
