@@ -15,18 +15,15 @@ For more information on a specific command use `mpc-pls help <command>`.
 
 ### Supported Playlist Formats
 
-The tool currently supports the following playlist formats:
-
- - `.asx`
- - `.m3u` and `.m3u8`
- - `.pls`
- - `.mpcpl`
+The tool currently supports `.asx`, `.m3u` and `.m3u8`, `.pls`, and `.mpcpl` playlist formats.
 
 ### Why the Name?
 
 I named it `mpc-pls` because originally it only supported the `.mpcpl` (Media Player *Classic* PlayList) format. I've expanded the available range to the ones Media Player Classic natively exports to.
 
-## Downloads
+## Getting Started
+
+### Downloads
 
 You can download pre-built executables from the available [releases](https://github.com/NuxiiGit/mpc-playlist-manager/releases). (`mpc-pls.zip`)
 
