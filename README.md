@@ -11,7 +11,7 @@ The tool currently supports the following playlist formats:
  - `.pls`
  - `.mpcpl`
 
-## Why the Name?
+### Why the Name?
 
 I named it `mpc-pls` because originally it only supported the `.mpcpl` (Media Player *Classic* PlayList) format. I've expanded the available range to the ones Media Player Classic natively exports to.
 
@@ -26,7 +26,7 @@ The following commands can be used by typing `mpc-pls <command> [args]`.
 
 For more information on a specific command use `mpc-pls help <command>`.
 
-### Downloads
+## Downloads
 
 You can download pre-built executables from the available [releases](https://github.com/NuxiiGit/mpc-playlist-manager/releases). (`mpc-pls.zip`)
 
