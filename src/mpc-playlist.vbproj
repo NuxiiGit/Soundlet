@@ -76,12 +76,8 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\Command.vb" />
-    <Compile Include="Commands\Commands\Build.vb" />
-    <Compile Include="Commands\Commands\Help.vb" />
-    <Compile Include="Commands\Commands\Print.vb" />
-    <Compile Include="Commands\Commands\Shuffle.vb" />
-    <Compile Include="Commands\Commands\Update.vb" />
+    <Compile Include="Builder\Builder.vb" />
+    <Compile Include="Builder\Commands\Test.vb" />
     <Compile Include="Main.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
