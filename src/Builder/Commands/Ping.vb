@@ -1,9 +1,7 @@
-﻿Imports mpc_playlist.Builder
+﻿Public Class Ping
+    Implements PlaylistManager.Builder.ICommand
 
-Public Class Ping
-    Implements ICommand
-
-    Public Sub Execute(ByRef list As Playlist, ByVal ParamArray params As String()) Implements ICommand.Execute
+    Public Sub Execute(ByRef list As Playlist, ByVal ParamArray params As String()) Implements PlaylistManager.Builder.ICommand.Execute
         Console.WriteLine("Pong!")
     End Sub
 

@@ -1,4 +1,4 @@
-﻿Imports mpc_playlist.Builder
+﻿Imports PlaylistManager.Builder
 
 Module Main
 

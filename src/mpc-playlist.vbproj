@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{57047FA1-B0D3-43B1-92AA-312AC4BA9421}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <StartupObject>mpc_playlist.Main</StartupObject>
-    <RootNamespace>mpc_playlist</RootNamespace>
+    <StartupObject>PlaylistManager.Main</StartupObject>
+    <RootNamespace>PlaylistManager</RootNamespace>
     <AssemblyName>mpc-pls</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Console</MyType>
@@ -81,6 +81,9 @@
     <Compile Include="Builder\Commands\Ping.vb" />
     <Compile Include="Builder\Commands\Relative.vb" />
     <Compile Include="Builder\Commands\Remove.vb" />
+    <Compile Include="Builder\Commands\Append.vb" />
+    <Compile Include="Builder\Commands\Shuffle.vb" />
+    <Compile Include="Builder\Commands\Subtract.vb" />
     <Compile Include="Main.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">

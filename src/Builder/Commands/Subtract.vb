@@ -1,9 +1,7 @@
-﻿Imports mpc_playlist.Builder
+﻿Public Class Subtract
+    Implements PlaylistManager.Builder.ICommand
 
-Public Class Subtract
-    Implements ICommand
-
-    Public Sub Execute(ByRef list As Playlist, ByVal ParamArray params As String()) Implements ICommand.Execute
+    Public Sub Execute(ByRef list As Playlist, ByVal ParamArray params As String()) Implements PlaylistManager.Builder.ICommand.Execute
         Console.WriteLine("Subtracting the following playlist files:")
         For Each filepath As String In params
             Console.WriteLine(" |> " & filepath)

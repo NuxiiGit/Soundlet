@@ -1,5 +1,5 @@
 ﻿Imports System.Reflection
-Imports mpc_playlist.Playlist
+Imports PlaylistManager.Playlist
 
 ''' <summary>
 ''' A module which provides a command <see cref="Builder.ICommand"/> interface and procedures for parsing and executing commands to build a playlist file.
