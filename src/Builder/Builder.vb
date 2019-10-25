@@ -25,6 +25,7 @@ Public Module Builder
         ''' Executes this command using this parameter array.
         ''' </summary>
         ''' <param name="params">The array of parameters to pass.</param>
+        ''' <exception cref="ArgumentException">Thrown if there was a problem with the parameter array.</exception>
         Sub Execute(ByRef list As Playlist, ByVal ParamArray params As String())
 
     End Interface

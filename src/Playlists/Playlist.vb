@@ -69,6 +69,7 @@ Public Class Playlist
         ''' Captures the paths from this stream and inserts them into a <c>String()</c>.
         ''' </summary>
         ''' <param name="stream">The input stream for this file.</param>
+        ''' <exception cref="IOException">Thrown if there was a problem decoding the file.</exception>
         Function Decode(ByRef stream As StreamReader) As String()
 
         ''' <summary>
@@ -76,6 +77,7 @@ Public Class Playlist
         ''' </summary>
         ''' <param name="stream">The output stream for this file.</param>
         ''' <param name="paths">The array of filepaths to encode.</param>
+        ''' <exception cref="IOException">Thrown if there was a problem encoding the file.</exception>
         Sub Encode(ByRef stream As StreamWriter, ByRef paths As String())
 
     End Interface
