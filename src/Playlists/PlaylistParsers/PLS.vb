@@ -24,10 +24,10 @@ Public Class PLS
 
     Public Sub Encode(ByRef stream As StreamWriter, ByRef paths As String()) Implements Playlist.Extension.Encode
         stream.WriteLine(HEADER)
-        Dim i As Integer = 1
+        Dim i As Integer = 0
         For Each record As String In paths
-            stream.WriteLine("File" & i & "=" & record)
             i += 1
+            stream.WriteLine("File" & i & "=" & record)
         Next
         stream.WriteLine("NumberOfEntries=" & i)
         stream.WriteLine("Version=3")
