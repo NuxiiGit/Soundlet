@@ -77,7 +77,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Builder\Builder.vb" />
-    <Compile Include="Builder\Commands\Test.vb" />
+    <Compile Include="Builder\Commands\Insert.vb" />
+    <Compile Include="Builder\Commands\Ping.vb" />
+    <Compile Include="Builder\Commands\Relative.vb" />
+    <Compile Include="Builder\Commands\Remove.vb" />
     <Compile Include="Main.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
