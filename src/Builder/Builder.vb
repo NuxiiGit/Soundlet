@@ -9,12 +9,12 @@ Public Module Builder
     ''' <summary>
     ''' The separator used to distinguish commands from normal command line arguments.
     ''' </summary>
-    Const PREFIX As Char = "-"c
+    Public Const PREFIX As Char = "-"c
 
     ''' <summary>
     ''' Maintains a relationship between the name of a command, and its actual command extension <see cref="Builder.ICommand"/>.
     ''' </summary>
-    Private extensions As Dictionary(Of String, ICommand) = New Dictionary(Of String, ICommand)
+    Private commands As Dictionary(Of String, ICommand) = New Dictionary(Of String, ICommand)
 
     ''' <summary>
     ''' An interface which exposes command extensions.
@@ -37,9 +37,17 @@ Public Module Builder
         Dim template As Type = GetType(ICommand)
         For Each dataType As Type In template.Assembly.GetTypes()
             If dataType.IsClass() AndAlso dataType.GetInterfaces.Contains(template) Then _
-                    extensions.Add(dataType.Name.ToUpper(), Activator.CreateInstance(dataType))
+                    commands.Add(dataType.Name.ToUpper(), Activator.CreateInstance(dataType))
         Next
     End Sub
+
+    ''' <summary>
+    ''' Returns an array of all possible commands.
+    ''' </summary>
+    ''' <returns>An array of all available commands</returns>
+    Public Function GetCommands() As String()
+        Return commands.Keys.ToArray()
+    End Function
 
     ''' <summary>
     ''' Parses a list of tokens and executes the commands.
@@ -85,7 +93,7 @@ Public Module Builder
     ''' <summary>
     ''' Returns whether a token is like a command.
     ''' </summary>
-    ''' <param name="token"></param>
+    ''' <param name="token">The token to check.</param>
     ''' <returns><c>True</c> if the token starts with <see cref="PREFIX"/> and <c>False</c> otherwise.</returns>
     Private Function IsCommand(ByVal token As String) As Boolean
         Return token Like PREFIX & "[!" & PREFIX & "]*"
@@ -101,7 +109,7 @@ Public Module Builder
     Private Function FindCommand(ByVal token As String) As ICommand
         If IsCommand(token)
             token = token.Remove(0, 1).ToUpper()
-            If extensions.ContainsKey(token) Then Return extensions(token)
+            If commands.ContainsKey(token) Then Return commands(token)
             Throw New KeyNotFoundException("Command with name '" & token & "' does not exist!")
         End If
         Throw New ArgumentException("'" & token & "' is not a valid command name.")

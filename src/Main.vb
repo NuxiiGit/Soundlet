@@ -7,11 +7,19 @@ Module Main
         Try 
             Select args.Count()
             Case 1
-                Console.WriteLine("Hello, you are using this wrong")
+                Console.WriteLine("To use this tool, please type")
                 Console.WriteLine()
-                Console.Write("Please press any key to exit")
+                Console.WriteLine("  mpc-pls <directory> <destination>")
+                Console.WriteLine()
+                Console.WriteLine("where 'directory' is the location of the directory containing your media files, and 'destination' is the location you want to save the final playlist file at.")
+                Console.WriteLine()
+                Console.WriteLine("Here is a list of additional commands:" & vbCrLf)
+                For Each name As String In Builder.GetCommands()
+                    Console.WriteLine(" - " & name.ToLower())
+                Next
+                Console.WriteLine(vbCrLf & "You can use these by typing the symbol '" & Builder.PREFIX & "' followed by the name of the command. E.g. '" & Builder.PREFIX & "remove <arguments>'.")
+                Console.Write(vbCrLf & "Press any key to exit.")
                 Console.ReadKey()
-                Console.WriteLine()
             Case 3
                 Builder.Make(args(1), args(2))
             Case Is > 3
