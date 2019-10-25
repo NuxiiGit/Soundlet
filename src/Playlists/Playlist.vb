@@ -81,10 +81,8 @@ Public Class Playlist
     Shared Sub New()
         Dim template As Type = GetType(Extension)
         For Each dataType As Type In template.Assembly.GetTypes()
-            If (dataType.IsClass() AndAlso dataType.GetInterfaces.Contains(template))
-                '' valid class type
-                extensions.Add("." & dataType.Name.ToUpper(), Activator.CreateInstance(dataType))
-            End If
+            If dataType.IsClass() AndAlso dataType.GetInterfaces.Contains(template) Then _
+                    extensions.Add("." & dataType.Name.ToUpper(), Activator.CreateInstance(dataType))
         Next
     End Sub
 
@@ -92,13 +90,13 @@ Public Class Playlist
     ''' Default constructor.
     ''' </summary>
     ''' <remarks>Does nothing.</remarks>
-    Sub New() : End Sub
+    Public Sub New() : End Sub
 
     ''' <summary>
     ''' Constructs a playlist from a playlist file.
     ''' </summary>
     ''' <param name="filepath">The path of the playlist file.</param>
-    Sub New(ByVal filepath As String)
+    Public Sub New(ByVal filepath As String)
         Load(filepath)
     End Sub
 
@@ -106,7 +104,7 @@ Public Class Playlist
     ''' Constructs a playlist from an <c>IEnumerable</c> of filepaths.
     ''' </summary>
     ''' <param name="enumerator">An <c>IEnumerable</c> of filepaths.</param>
-    Sub New(ByVal enumerator As IEnumerable(Of String))
+    Public Sub New(ByVal enumerator As IEnumerable(Of String))
         Add(enumerator.ToArray())
     End Sub
 
@@ -114,7 +112,7 @@ Public Class Playlist
     ''' Constructs a playlist from an array of filepaths.
     ''' </summary>
     ''' <param name="paths">An array of filepaths.</param>
-    Sub New(ByVal paths As String())
+    Public Sub New(ByVal paths As String())
         Add(paths)
     End Sub
 
@@ -127,12 +125,12 @@ Public Class Playlist
     Public Sub Load(ByVal filepath As String)
         filepath = GetFullPath(filepath)
         Console.WriteLine("path: " & filepath)
-        If (Not File.Exists(filepath)) Then Throw New IOException("Playlist file does not exist.")
+        If Not File.Exists(filepath) Then Throw New IOException("Playlist file does not exist.")
         Using input As StreamReader = My.Computer.FileSystem.OpenTextFileReader(filepath)
-            If (input.EndOfStream) Then Throw New IOException("Playlist file cannot be empty.")
+            If input.EndOfStream Then Throw New IOException("Playlist file cannot be empty.")
             '' compile paths
             Dim ext As String = Path.GetExtension(filepath).ToUpper()
-            If (Not extensions.ContainsKey(ext)) Then Throw New _
+            If Not extensions.ContainsKey(ext) Then Throw New _
                     KeyNotFoundException(String.Format("Unknown playlist file extension {0}", ext))
             Dim dir As String = Path.GetDirectoryName(filepath)
             For Each path As String In extensions(ext).Decode(input)
@@ -149,7 +147,7 @@ Public Class Playlist
     Public Sub Save(ByVal filepath As String, Optional ByVal relative As Boolean = False)
         filepath = GetFullPath(filepath)
         Dim outputPaths As String() = paths.ToArray()
-        If (relative)
+        If relative
             '' convert the paths to be relative to 'filepath'
             Dim dir As String = Path.GetDirectoryName(filepath)
             For i As Integer = 0 To (outputPaths.Length - 1)
@@ -158,7 +156,7 @@ Public Class Playlist
         End If
         Using output As StreamWriter = My.Computer.FileSystem.OpenTextFileWriter(filepath, false)
             Dim ext As String = Path.GetExtension(filepath).ToUpper()
-            If (Not extensions.ContainsKey(ext)) Then Throw New _
+            If Not extensions.ContainsKey(ext) Then Throw New _
                     KeyNotFoundException(String.Format("Unknown playlist file extension {0}", ext))
             extensions(ext).Encode(output, outputPaths)
         End Using
@@ -172,7 +170,7 @@ Public Class Playlist
         Dim count As Integer = paths.Count
         For i As Integer = 0 To (count - 1)
             Dim j As Integer = rand.Next(i, count)
-            If (i <> j)
+            If i <> j
                 Dim temp As String = paths(i)
                 paths(i) = paths(j)
                 paths(j) = temp
@@ -204,10 +202,10 @@ Public Class Playlist
         Directory.SetCurrentDirectory(local)
         Dim backtracks As String = ""
         Do
-            If (local Is Nothing) Then Exit Do
-            If (filepath.Contains(local))
+            If local Is Nothing Then Exit Do
+            If filepath.Contains(local)
                 filepath = filepath.Replace(local, backtracks)
-                If ((filepath IsNot Nothing) AndAlso (filepath(0) = delimiter)) Then _
+                If (filepath IsNot Nothing) AndAlso (filepath(0) = delimiter) Then _
                         filepath = filepath.Remove(0, 1)
                 Exit Do
             End If
@@ -220,9 +218,9 @@ Public Class Playlist
 
     Protected Shared Function GetFullPath(ByVal filepath As String) As String
         Dim newPath As String = filepath
-        If (Not Path.IsPathRooted(filepath))
+        If Not Path.IsPathRooted(filepath)
             newPath = Path.GetFullPath(filepath)
-            If (Not Path.IsPathRooted(newPath))
+            If Not Path.IsPathRooted(newPath)
                 '' this condition is met if the filepath did not have a leading `./`
                 newPath = Path.GetFullPath("./" & filepath)
             End If
@@ -235,7 +233,7 @@ Public Class Playlist
     ''' </summary>
     ''' <param name="filepath">The filepath to add.</param>
     Public Sub Add(ByVal filepath As String) Implements ICollection(Of String).Add
-        If (not paths.Contains(filepath)) Then paths.Add(Path.GetFullPath(filepath))
+        If not paths.Contains(filepath) Then paths.Add(Path.GetFullPath(filepath))
     End Sub
 
     ''' <summary>
@@ -243,7 +241,7 @@ Public Class Playlist
     ''' </summary>
     ''' <param name="filepaths">The <c>String()</c> of filepaths to add.</param>
     Public Sub Add(ByVal filepaths As String())
-        For Each filepath In filepaths
+        For Each filepath As String In filepaths
             Add(filepath)
         Next
     End Sub
@@ -294,8 +292,8 @@ Public Class Playlist
     ''' </summary>
     ''' <returns>An <c>IEnumerator</c> of playlist sound file paths.</returns>
     Public Iterator Function GetEnumerator() As IEnumerator(Of String) Implements IEnumerable(Of String).GetEnumerator
-        For Each path In paths
-            Yield path
+        For Each filepath As String In paths
+            Yield filepath
         Next
     End Function
 
@@ -323,7 +321,7 @@ Public Class Playlist
     ''' <param name="array">The array to copy the playlist filepaths to.</param>
     ''' <param name="arrayIndex">The starting index.</param>
     Public Sub CopyTo(ByVal  array As String(), ByVal arrayIndex As Integer) Implements ICollection(Of String).CopyTo
-        For Each filepath In paths
+        For Each filepath As String In paths
             array(arrayIndex) = filepath
             arrayIndex += 1
         Next

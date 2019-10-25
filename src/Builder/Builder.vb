@@ -35,27 +35,25 @@ Public Module Builder
     Sub New()
         Dim template As Type = GetType(ICommand)
         For Each dataType As Type In template.Assembly.GetTypes()
-            If (dataType.IsClass() AndAlso dataType.GetInterfaces.Contains(template))
-                ' valid class type
-                extensions.Add(dataType.Name.ToLower(), Activator.CreateInstance(dataType))
-            End If
+            If dataType.IsClass() AndAlso dataType.GetInterfaces.Contains(template) Then _
+                    extensions.Add(dataType.Name.ToLower(), Activator.CreateInstance(dataType))
         Next
     End Sub
 
     ''' <summary>
     ''' Parses a list of tokens and executes the commands.
     ''' </summary>
-    ''' <param name="filemask">The file mask to use when searching for candidate sound files.</param>
-    ''' <param name="destination">The target location of the playlist file.</param>
+    ''' <param name="dir">The directory to use when searching for candidate sound files.</param>
+    ''' <param name="dest">The target location of the playlist file.</param>
     ''' <param name="tokens">The list of command tokens.</param>
-    Public Sub Execute(ByVal directory As String, ByVal destination As String, ByVal ParamArray tokens As String())
+    Public Sub Execute(ByVal dir As String, ByVal dest As String, ByVal ParamArray tokens As String())
         Dim list As Playlist = New Playlist()
         For Each pair In Builder.Parse(tokens)
             Dim command As ICommand = pair.Item1
             Dim arguments As String() = pair.Item2
             command.Execute(list, arguments)
         Next
-        'list.Save(destination)
+        'list.Save(dest)
     End Sub
 
     ''' <summary>

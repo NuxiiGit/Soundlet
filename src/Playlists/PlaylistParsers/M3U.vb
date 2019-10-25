@@ -13,7 +13,7 @@ Public Class M3U
     ''' </summary>
     Public Function Decode(ByRef stream As StreamReader) As String() Implements Playlist.Extension.Decode
         Dim paths As List(Of String) = New List(Of String)
-        While (Not stream.EndOfStream)
+        While Not stream.EndOfStream
             paths.add(stream.ReadLine())
         End While
         Return paths.ToArray()
@@ -23,8 +23,8 @@ Public Class M3U
     ''' <see cref="Playlist.Extension.Encode(ByRef StreamWriter, ByRef String())"/>
     ''' </summary>
     Public Sub Encode(ByRef stream As StreamWriter, ByRef paths As String()) Implements Playlist.Extension.Encode
-        For Each path In paths
-            stream.WriteLine(path)
+        For Each filepath As String In paths
+            stream.WriteLine(filepath)
         Next
     End Sub
 

@@ -17,9 +17,9 @@ Public Class ASX
     Public Function Decode(ByRef stream As StreamReader) As String() Implements Playlist.Extension.Decode
         Dim paths As List(Of String) = New List(Of String)
         Using xml As XmlReader = XmlReader.Create(stream)
-            If (xml.ReadToFollowing("ASX"))
-                While (xml.ReadToFollowing("Entry"))
-                    If (Not (xml.ReadToDescendant("Ref") AndAlso xml.MoveToFirstAttribute())) Then _
+            If xml.ReadToFollowing("ASX")
+                While xml.ReadToFollowing("Entry")
+                    If Not (xml.ReadToDescendant("Ref") AndAlso xml.MoveToFirstAttribute()) Then _
                             Throw New IOException("Malformed file structure.")
                     paths.Add(xml.Value)
                 End While
@@ -33,8 +33,8 @@ Public Class ASX
     ''' </summary>
     Public Sub Encode(ByRef stream As StreamWriter, ByRef paths As String()) Implements Playlist.Extension.Encode
         stream.WriteLine("<ASX version = ""3.0"" >")
-        For Each path In paths
-            stream.WriteLine("<Entry><Ref href = """ & path & """/></Entry>")
+        For Each filepath As String In paths
+            stream.WriteLine("<Entry><Ref href = """ & filepath & """/></Entry>")
         Next
         stream.WriteLine("</ASX>")
     End Sub
