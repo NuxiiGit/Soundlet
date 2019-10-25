@@ -102,7 +102,11 @@ Public Class Playlist
     ''' </summary>
     ''' <param name="filepath">The path of the playlist file.</param>
     Public Sub New(ByVal filepath As String)
-        Load(filepath)
+        If File.Exists(filepath)
+            Load(filepath)
+        Else
+            Populate(filepath)
+        End If
     End Sub
 
     ''' <summary>
@@ -140,6 +144,28 @@ Public Class Playlist
                 paths.Add(Path.GetFullPath(record))
             Next
         End Using
+    End Sub
+
+    ''' <summary>
+    ''' Loads all possible sound file formats into the playlist.
+    ''' </summary>
+    ''' <param name="root">The root directory to check for sound files.</param>
+    Public Sub Populate(ByVal root As String)
+        root = Path.GetFullPath(root)
+        If Not Directory.Exists(root) Then Throw New IOException("Top-level directory does not exist")
+        Dim dirs As Queue(Of String) = New Queue(Of String)()
+        dirs.Enqueue(root)
+        While dirs.Count > 0
+            Dim dir As String = dirs.Dequeue()
+            ' append files at this level
+            For Each filename As String In Directory.GetFiles(dir)
+                If {".MP3", ".WAV"}.Contains(Path.GetExtension(filename).ToUpper()) Then Add(filename)
+            Next
+            ' add additional directories
+            For Each subDir As String In Directory.GetDirectories(dir)
+                dirs.Enqueue(subDir)
+            Next
+        End While
     End Sub
     
     ''' <summary>

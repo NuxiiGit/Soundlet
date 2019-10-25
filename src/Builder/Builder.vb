@@ -36,24 +36,23 @@ Public Module Builder
         Dim template As Type = GetType(ICommand)
         For Each dataType As Type In template.Assembly.GetTypes()
             If dataType.IsClass() AndAlso dataType.GetInterfaces.Contains(template) Then _
-                    extensions.Add(dataType.Name.ToLower(), Activator.CreateInstance(dataType))
+                    extensions.Add(dataType.Name.ToUpper(), Activator.CreateInstance(dataType))
         Next
     End Sub
 
     ''' <summary>
     ''' Parses a list of tokens and executes the commands.
     ''' </summary>
-    ''' <param name="dir">The directory to use when searching for candidate sound files.</param>
+    ''' <param name="filepath">The directory to use when searching for candidate sound files.</param>
     ''' <param name="dest">The target location of the playlist file.</param>
-    ''' <param name="tokens">The list of command tokens.</param>
-    Public Sub Execute(ByVal dir As String, ByVal dest As String, ByVal ParamArray tokens As String())
-        Dim list As Playlist = New Playlist()
-        For Each pair In Builder.Parse(tokens)
-            Dim command As ICommand = pair.Item1
-            Dim arguments As String() = pair.Item2
-            command.Execute(list, arguments)
+    ''' <param name="command">The list of command tokens.</param>
+    Public Sub Make(ByVal filepath As String, ByVal dest As String, ByVal ParamArray command As String())
+        Dim list As Playlist = New Playlist(filepath)
+        ' run optional commands
+        For Each pair In Builder.Parse(command)
+            pair.Item1.Execute(list, pair.Item2)
         Next
-        'list.Save(dest)
+        list.Save(dest)
     End Sub
 
     ''' <summary>
@@ -100,7 +99,7 @@ Public Module Builder
     ''' <exception cref="ArgumentException">Thrown if the token is not a valid command.</exception>
     Private Function FindCommand(ByVal token As String) As ICommand
         If IsCommand(token)
-            token = token.Remove(0, 1)
+            token = token.Remove(0, 1).ToUpper()
             If extensions.ContainsKey(token) Then Return extensions(token)
             Throw New KeyNotFoundException("Command with name '" & token & "' does not exist!")
         End If
