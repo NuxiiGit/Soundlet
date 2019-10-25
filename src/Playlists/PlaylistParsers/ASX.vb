@@ -33,8 +33,8 @@ Public Class ASX
     ''' </summary>
     Public Sub Encode(ByRef stream As StreamWriter, ByRef paths As String()) Implements Playlist.Extension.Encode
         stream.WriteLine("<ASX version = ""3.0"" >")
-        For Each filepath As String In paths
-            stream.WriteLine("<Entry><Ref href = """ & filepath & """/></Entry>")
+        For Each record As String In paths
+            stream.WriteLine("<Entry><Ref href = """ & record & """/></Entry>")
         Next
         stream.WriteLine("</ASX>")
     End Sub

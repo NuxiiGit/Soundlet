@@ -35,9 +35,9 @@ Public Class MPCPL
     Public Sub Encode(ByRef stream As StreamWriter, ByRef paths As String()) Implements Playlist.Extension.Encode
         stream.WriteLine(HEADER)
         Dim i As Integer = 1
-        For Each filepath As String In paths
+        For Each record As String In paths
             stream.WriteLine(i & ",type,0")
-            stream.WriteLine(i & ",filename," & filepath)
+            stream.WriteLine(i & ",filename," & record)
             i += 1
         Next
     End Sub

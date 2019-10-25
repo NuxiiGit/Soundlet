@@ -3,8 +3,14 @@
 Module Main
 
     Sub Main()
-        Console.WriteLine(System.IO.Path.GetFullPath("."))
+        Dim list = new Playlist(Console.ReadLine())
+        For Each record In list
+            Console.WriteLine(record)
+        Next
         'Builder.Execute("", "", {"-test", "a", "-- b", "nice", "ok"})
+        list.relative = True
+        list.Save(Console.ReadLine())
+        Console.WriteLine("Done")
         Console.ReadKey()
         'Dim args As List(Of String) = New List(Of String)(Environment.GetCommandLineArgs())
         'args.RemoveAt(0) '' remove the first argument, which is usually the path to the executable

@@ -23,8 +23,8 @@ Public Class M3U
     ''' <see cref="Playlist.Extension.Encode(ByRef StreamWriter, ByRef String())"/>
     ''' </summary>
     Public Sub Encode(ByRef stream As StreamWriter, ByRef paths As String()) Implements Playlist.Extension.Encode
-        For Each filepath As String In paths
-            stream.WriteLine(filepath)
+        For Each record As String In paths
+            stream.WriteLine(record)
         Next
     End Sub
 
