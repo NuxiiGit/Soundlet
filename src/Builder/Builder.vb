@@ -44,7 +44,7 @@ Public Module Builder
     ''' <summary>
     ''' Returns an array of all possible commands.
     ''' </summary>
-    ''' <returns>An array of all available commands</returns>
+    ''' <returns>An array of all available commands.</returns>
     Public Function GetCommands() As String()
         Return commands.Keys.ToArray()
     End Function

@@ -83,6 +83,14 @@ Public Class Playlist
     End Interface
 
     ''' <summary>
+    ''' Returns an array of all supported extensions.
+    ''' </summary>
+    ''' <returns>An array of all available extensions.</returns>
+    Public Shared Function GetExtensions() As String()
+        Return extensions.Keys.ToArray()
+    End Function
+
+    ''' <summary>
     ''' Uses reflection to compile the dictionary of file extensions at runtime.
     ''' </summary>
     Shared Sub New()

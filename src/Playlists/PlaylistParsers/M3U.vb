@@ -8,7 +8,11 @@ Public Class M3U
     Public Function Decode(ByRef stream As StreamReader) As String() Implements Playlist.Extension.Decode
         Dim paths As List(Of String) = New List(Of String)
         While Not stream.EndOfStream
-            paths.add(stream.ReadLine())
+            Dim line As String = stream.ReadLine()
+            If line.Length > 0
+                If line(0) = "#"c Then Continue While
+                paths.add(line)
+            End If
         End While
         Return paths.ToArray()
     End Function
@@ -19,4 +23,8 @@ Public Class M3U
         Next
     End Sub
 
+End Class
+
+Public Class M3U8
+    Inherits M3U
 End Class

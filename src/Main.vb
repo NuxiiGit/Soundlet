@@ -1,4 +1,5 @@
 ﻿Imports PlaylistManager.Builder
+Imports PlaylistManager.Playlist
 
 Module Main
 
@@ -13,13 +14,25 @@ Module Main
                 Console.WriteLine()
                 Console.WriteLine("where 'directory' is the location of the directory containing your media files, and 'destination' is the location you want to save the final playlist file at.")
                 Console.WriteLine()
-                Console.WriteLine("Here is a list of additional commands:" & vbCrLf)
+                Console.WriteLine("Here is a list of currently supported playlist file extensions:")
+                Console.WriteLine()
+                For Each ext As String In Playlist.GetExtensions()
+                    Console.WriteLine(" - " & ext.ToLower())
+                Next
+                Console.WriteLine()
+                Console.WriteLine("Finally, here is a list of additional commands:")
+                Console.WriteLine()
                 For Each name As String In Builder.GetCommands()
                     Console.WriteLine(" - " & name.ToLower())
                 Next
-                Console.WriteLine(vbCrLf & "You can use these by typing the symbol '" & Builder.PREFIX & "' followed by the name of the command. E.g. '" & Builder.PREFIX & "remove <arguments>'.")
-                Console.Write(vbCrLf & "Press any key to exit.")
+                Console.WriteLine()
+                Console.WriteLine("You can use these by typing the symbol '" & Builder.PREFIX & "' followed by the name of the command. For example")
+                Console.WriteLine()
+                Console.WriteLine("  mpc-pls old.pls new.pls " & Builder.PREFIX & "remove ""Artist Name - Song Name.mp3""")
+                Console.WriteLine()
+                Console.Write("Press any key to exit.")
                 Console.ReadKey()
+                Console.WriteLine()
             Case 3
                 Builder.Make(args(1), args(2))
             Case Is > 3
