@@ -28,7 +28,7 @@ Module Main
                 Console.WriteLine()
                 Console.WriteLine("You can use these by typing the symbol '" & Builder.PREFIX & "' followed by the name of the command. For example")
                 Console.WriteLine()
-                Console.WriteLine("  mpc-pls old.pls new.pls " & Builder.PREFIX & "remove ""Artist Name - Song Name.mp3""")
+                Console.WriteLine("  mpc-pls old.pls new.pls " & Builder.PREFIX & "insert ./music")
                 Console.WriteLine()
                 Console.Write("Press any key to exit.")
                 Console.ReadKey()

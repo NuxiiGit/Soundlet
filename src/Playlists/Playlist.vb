@@ -110,13 +110,9 @@ Public Class Playlist
     ''' <summary>
     ''' Constructs a playlist from a playlist file.
     ''' </summary>
-    ''' <param name="filepath">The path of the playlist file.</param>
-    Public Sub New(ByVal filepath As String)
-        If File.Exists(filepath)
-            Load(filepath)
-        Else
-            Populate(filepath)
-        End If
+    ''' <param name="location">The path to consider.</param>
+    Public Sub New(ByVal location As String)
+        Collect(location)
     End Sub
 
     ''' <summary>
@@ -133,6 +129,18 @@ Public Class Playlist
     ''' <param name="paths">An array of filepaths.</param>
     Public Sub New(ByVal paths As String())
         Add(paths)
+    End Sub
+
+    ''' <summary>
+    ''' Either loads a playlist file, or searches for constructs a new playlist from a directory of files.
+    ''' </summary>
+    ''' <param name="location">The path to consider.</param>
+    Public Sub Collect(ByVal location As String)
+        If File.Exists(Path.GetFullPath(location))
+            Load(location)
+        Else
+            Populate(location)
+        End If
     End Sub
 
     ''' <summary>

@@ -80,8 +80,8 @@
     <Compile Include="Builder\Commands\Insert.vb" />
     <Compile Include="Builder\Commands\Ping.vb" />
     <Compile Include="Builder\Commands\Relative.vb" />
-    <Compile Include="Builder\Commands\Remove.vb" />
-    <Compile Include="Builder\Commands\Append.vb" />
+    <Compile Include="Builder\Commands\Title.vb" />
+    <Compile Include="Builder\Commands\Add.vb" />
     <Compile Include="Builder\Commands\Shuffle.vb" />
     <Compile Include="Builder\Commands\Subtract.vb" />
     <Compile Include="Main.vb" />
