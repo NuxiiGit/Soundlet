@@ -2,11 +2,11 @@
 
 Imports Id3
 
-Public Class Genre
+Public Class Artist
     Implements PlaylistManager.Builder.ICommand
 
     Public Sub Execute(ByRef list As Playlist, ByVal ParamArray params As String()) Implements PlaylistManager.Builder.ICommand.Execute
-        Console.WriteLine("Matching genres...")
+        Console.WriteLine("Matching artists...")
         Dim i As Integer = 0
         While i < list.Count
             Dim keep As Boolean = False
@@ -15,8 +15,8 @@ Public Class Genre
             Case ".mp3"
                 Using mp3 As New Mp3(record)
                     For Each tag As Id3Tag In mp3.GetAllTags()
-                        Dim genres As String() = tag.Genre.ToString().Split("/"c)
-                        If params.All(Function(ByVal x As String) genres.Contains(x))
+                        Dim artists As String() = tag.Artists.ToString().Split("/"c)
+                        If params.Any(Function(ByVal x As String) artists.Contains(x))
                             keep = True
                             Exit for
                         End If

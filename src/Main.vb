@@ -1,4 +1,6 @@
-﻿Imports PlaylistManager.Builder
+﻿Imports System.IO
+
+Imports PlaylistManager.Builder
 Imports PlaylistManager.Playlist
 
 Module Main
@@ -6,6 +8,7 @@ Module Main
     Sub Main()
         Dim args As List(Of String) = New List(Of String)(Environment.GetCommandLineArgs())
         Try 
+            Dim command As String() = {}
             Select args.Count()
             Case 1
                 Console.WriteLine("To use this tool, please type")
@@ -33,13 +36,18 @@ Module Main
                 Console.Write("Press any key to exit.")
                 Console.ReadKey()
                 Console.WriteLine()
+                Exit Try
             Case 3
-                Builder.Make(args(1), args(2))
             Case Is > 3
-                Builder.Make(args(1), args(2), args.Skip(3).ToArray())
+                command = args.Skip(3).ToArray()
             Case Else
                 Throw New ArgumentException("Please supply at least two arguments")
             End Select
+            Dim list As Playlist = Builder.Make(args(1), command)
+            Console.WriteLine("Building playlist...")
+            For i As Integer = 0 To list.Count - 1
+                Console.WriteLine(" No.{0}" & vbTab & "{1}", i, Path.GetFileName(list(i)))
+            Next
         Catch e As Exception
             Console.WriteLine(e.Message)
         End Try

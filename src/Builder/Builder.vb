@@ -53,16 +53,15 @@ Public Module Builder
     ''' Parses a list of tokens and executes the commands.
     ''' </summary>
     ''' <param name="filepath">The directory to use when searching for candidate sound files.</param>
-    ''' <param name="dest">The target location of the playlist file.</param>
     ''' <param name="command">The list of command tokens.</param>
-    Public Sub Make(ByVal filepath As String, ByVal dest As String, ByVal ParamArray command As String())
+    Public Function Make(ByVal filepath As String, ByVal ParamArray command As String())
         Dim list As Playlist = New Playlist(filepath)
         ' run optional commands
         For Each pair In Builder.Parse(command)
             pair.Item1.Execute(list, pair.Item2)
         Next
-        list.Save(dest)
-    End Sub
+        Return list
+    End Function
 
     ''' <summary>
     ''' Converts a list of tokens into a list of command objects and their arguments.
