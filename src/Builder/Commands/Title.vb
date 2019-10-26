@@ -4,14 +4,18 @@ Public Class Title
     Implements PlaylistManager.Builder.ICommand
 
     Public Sub Execute(ByRef list As Playlist, ByVal ParamArray params As String()) Implements PlaylistManager.Builder.ICommand.Execute
-        Console.WriteLine("Filtering out elements whose names arent matches:")
+        Console.WriteLine("Matching titles:")
         For Each pattern As String In params
-            For Each record In list
-                If Path.GetFileName(record) Like pattern
-                    Console.WriteLine(" - " & record)
-                    list.Remove(record)
+            Dim i As Integer = 0
+            While i < list.Count
+                Dim record As String = list(i)
+                If Not (Path.GetFileName(record) Like pattern)
+                    list.RemoveAt(i)
+                Else
+                    Console.WriteLine("| " & Path.GetFileName(record))
+                    i += 1
                 End If
-            Next
+            End While
         Next
     End Sub
 

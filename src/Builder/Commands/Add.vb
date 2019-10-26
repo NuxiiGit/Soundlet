@@ -2,10 +2,9 @@
     Implements PlaylistManager.Builder.ICommand
 
     Public Sub Execute(ByRef list As Playlist, ByVal ParamArray params As String()) Implements PlaylistManager.Builder.ICommand.Execute
-        Console.WriteLine("Appending the following playlist files:")
+        Console.WriteLine("Appending playlist files...")
         For Each filepath As String In params
-            Console.WriteLine(" - " & filepath)
-            For Each record In New Playlist(filepath)
+            For Each record As String In New Playlist(filepath)
                 list.Add(record)
             Next
         Next
