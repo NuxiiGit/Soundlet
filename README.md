@@ -4,14 +4,13 @@ This repository contains the source code for `mpc-pls`; a command-line tool whic
 
 ## Features
 
-The following commands can be used by typing `mpc-pls <command> [args]`.
- 
- - `build` for building a new playlist from a directory of files.
- - `print` for listing the contents of a playlist file.
- - `shuffle` for shuffling a playlist file.
- - `update` for adding or removing files from a playlist file.
+The tool features a a single expressive command. Simply call:
 
-For more information on a specific command use `mpc-pls help <command>`.
+```
+mpc-pls <source> <destination> [<commands>]
+```
+
+Where `source` is the file location of an existing playlist file, or the directory containing your media files; `destination` is the final location you want to save your new playlist file to; and `commands` are a list of optional commands, beginning with a `-`.
 
 ### Supported Playlist Formats
 
