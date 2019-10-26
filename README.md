@@ -18,7 +18,7 @@ Where `source` is the file location of an existing playlist file, or the directo
 
 ### Example
 
-Let's say you want to create a playlist of all jazz songs in your music folder. First navigate to where your `Music` folder is located, and then you would type the following:
+Let's say you want to create a playlist of all *Jazz* songs in your music folder. First, navigate to where your `Music` folder is located, and then you would type the following:
 
 ```
 mpc-pls ./Music jazz.pls -genre Jazz
