@@ -11,19 +11,13 @@ Module Main
             Dim command As String() = {}
             Select args.Count()
             Case 1
-                Console.WriteLine("To use this tool, please type")
+                Console.WriteLine("To get started, type")
                 Console.WriteLine()
-                Console.WriteLine("  mpc-pls <directory> <destination>")
+                Console.WriteLine("  mpc-pls <source> <destination>")
                 Console.WriteLine()
-                Console.WriteLine("where 'directory' is the location of the directory containing your media files, and 'destination' is the location you want to save the final playlist file at.")
+                Console.WriteLine("Where <source> is the directory containing your media files, and <destination> is your save path.")
                 Console.WriteLine()
-                Console.WriteLine("Here is a list of currently supported playlist file extensions:")
-                Console.WriteLine()
-                For Each ext As String In Playlist.GetExtensions()
-                    Console.WriteLine(" - " & ext.ToLower())
-                Next
-                Console.WriteLine()
-                Console.WriteLine("Finally, here is a list of additional commands:")
+                Console.WriteLine("Here is a list of additional commands:")
                 Console.WriteLine()
                 For Each name As String In Builder.GetCommands()
                     Console.WriteLine(" - " & name.ToLower())
@@ -48,6 +42,7 @@ Module Main
             For i As Integer = 0 To list.Count - 1
                 Console.WriteLine(" No.{0}" & vbTab & "{1}", i, Path.GetFileName(list(i)))
             Next
+            list.Save(args(2))
         Catch e As Exception
             Console.WriteLine(e.Message)
         End Try
