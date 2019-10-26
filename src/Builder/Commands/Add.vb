@@ -1,4 +1,4 @@
-﻿Public Class Append
+﻿Public Class Add
     Implements PlaylistManager.Builder.ICommand
 
     Public Sub Execute(ByRef list As Playlist, ByVal ParamArray params As String()) Implements PlaylistManager.Builder.ICommand.Execute
