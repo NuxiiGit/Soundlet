@@ -5,7 +5,7 @@ Imports Id3
 Public Class Genre
     Implements PlaylistManager.Builder.ICommand
 
-    Public Sub Execute(ByRef list As Playlist, ByVal ParamArray params As String()) Implements PlaylistManager.Builder.ICommand.Execute
+    Public Sub Execute(ByRef list As Playlist, ByVal modifiers As String(), ByVal params As String()) Implements PlaylistManager.Builder.ICommand.Execute
         Console.WriteLine("Matching genres...")
         Dim i As Integer = 0
         While i < list.Count
