@@ -24,7 +24,9 @@ Public Module Filter
                         Dim elements As String()
                         Select tagKind
                         Case "genre"
-                            elements = tag.Genre.ToString.Split("/"c)
+                            elements = tag.Genre.ToString().Split("/"c)
+                        Case "artist"
+                            elements = tag.Artists.ToString().Split("/"c)
                         Case Else
                             Throw New ArgumentException("Unknown tag '{0}'", tagKind)
                         End Select
@@ -68,6 +70,16 @@ Public Class Genre
     Public Sub Execute(ByRef list As Playlist, ByVal modifiers As String(), ByVal params As String()) Implements PlaylistManager.Builder.ICommand.Execute
         Dim filterKind As String = If(modifiers.Length > 0, modifiers(0), "all")
         Filter.Filter(list, "genre", filterKind, params)
+    End Sub
+
+End Class
+
+Public Class Artist
+    Implements PlaylistManager.Builder.ICommand
+
+    Public Sub Execute(ByRef list As Playlist, ByVal modifiers As String(), ByVal params As String()) Implements PlaylistManager.Builder.ICommand.Execute
+        Dim filterKind As String = If(modifiers.Length > 0, modifiers(0), "any")
+        Filter.Filter(list, "artist", filterKind, params)
     End Sub
 
 End Class
