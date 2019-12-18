@@ -28,6 +28,8 @@ Public Module Filter
                             feature = tag.Genre.ToString()
                         Case "artist"
                             feature = tag.Artists.ToString()
+                        Case "album"
+                            feature = tag.Album.ToString()
                         Case Else
                             Throw New ArgumentException("Unknown tag '{0}'", tagKind)
                         End Select
@@ -87,6 +89,16 @@ Public Class Artist
     Public Sub Execute(ByRef list As Playlist, ByVal modifiers As String(), ByVal params As String()) Implements PlaylistManager.Builder.ICommand.Execute
         Dim filterKind As String = If(modifiers.Length > 0, modifiers(0), "any")
         Filter.Filter(list, "artist", filterKind, params)
+    End Sub
+
+End Class
+
+Public Class Album
+    Implements PlaylistManager.Builder.ICommand
+
+    Public Sub Execute(ByRef list As Playlist, ByVal modifiers As String(), ByVal params As String()) Implements PlaylistManager.Builder.ICommand.Execute
+        Dim filterKind As String = If(modifiers.Length > 0, modifiers(0), "any")
+        Filter.Filter(list, "album", filterKind, params)
     End Sub
 
 End Class
