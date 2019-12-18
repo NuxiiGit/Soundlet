@@ -78,7 +78,7 @@
   <ItemGroup>
     <Compile Include="Builder\Builder.vb" />
     <Compile Include="Builder\Commands\Artist.vb" />
-    <Compile Include="Builder\Commands\Genre.vb" />
+    <Compile Include="Builder\Commands\Filter.vb" />
     <Compile Include="Builder\Commands\Insert.vb" />
     <Compile Include="Builder\Commands\Ping.vb" />
     <Compile Include="Builder\Commands\Relative.vb" />
