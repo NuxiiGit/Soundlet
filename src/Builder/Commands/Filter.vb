@@ -49,6 +49,11 @@ Public Module Filter
                                     End If
                                 End If
                             Next
+                        Case "only"
+                            If elements.Length = 1
+                                Dim element As String = elements(0)
+                                keep = predicates.Any(Function(ByVal x As String) element = x)
+                            End If
                         Case Else
                             Throw New ArgumentException("Unknown filter kind '{0}'", filterKind)
                         End Select
