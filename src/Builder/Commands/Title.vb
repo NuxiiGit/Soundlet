@@ -3,7 +3,7 @@
 Public Class Title
     Implements PlaylistManager.Builder.ICommand
 
-    Public Sub Execute(ByRef list As Playlist, ByVal ParamArray params As String()) Implements PlaylistManager.Builder.ICommand.Execute
+    Public Sub Execute(ByRef list As Playlist, ByVal modifiers As String(), ByVal params As String()) Implements PlaylistManager.Builder.ICommand.Execute
         Console.WriteLine("Matching titles...")
         For Each pattern As String In params
             Dim i As Integer = 0
