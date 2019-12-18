@@ -31,6 +31,8 @@ Public Module Filter
                         Select filterKind
                         Case "all"
                             keep = predicates.All(Function(ByVal x As String) elements.Contains(x))
+                        Case "any"
+                            keep = predicates.Any(Function(ByVal x As String) elements.Contains(x))
                         Case Else
                             Throw New ArgumentException("Unknown filter kind '{0}'", filterKind)
                         End Select
