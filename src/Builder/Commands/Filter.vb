@@ -12,6 +12,7 @@ Public Module Filter
     ''' <param name="filterKind">The sort of filter method to perform.</param>
     ''' <param name="predicates">The values to use to check for satisfaction.</param>
     Public Sub Filter(ByRef list As Playlist, ByVal tagKind As String, ByVal filterKind As String, ByVal predicates As String())
+        predicates = predicates.Select(Function(ByVal x As String) x.ToLower()).ToArray()
         Console.WriteLine("Filtering by {0}...", tagKind)
         Dim i As Integer = 0
         While i < list.Count
@@ -21,15 +22,16 @@ Public Module Filter
             Case ".mp3"
                 Using mp3 As New Mp3(record)
                     For Each tag As Id3Tag In mp3.GetAllTags()
-                        Dim elements As String()
+                        Dim feature As String
                         Select tagKind
                         Case "genre"
-                            elements = tag.Genre.ToString().Split("/"c)
+                            feature = tag.Genre.ToString()
                         Case "artist"
-                            elements = tag.Artists.ToString().Split("/"c)
+                            feature = tag.Artists.ToString()
                         Case Else
                             Throw New ArgumentException("Unknown tag '{0}'", tagKind)
                         End Select
+                        Dim elements As String() = feature.ToLower().Split("/"c)
                         Select filterKind
                         Case "all"
                             keep = predicates.All(Function(ByVal x As String) elements.Contains(x))
