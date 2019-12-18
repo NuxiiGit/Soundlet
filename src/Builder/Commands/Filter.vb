@@ -33,6 +33,18 @@ Public Module Filter
                             keep = predicates.All(Function(ByVal x As String) elements.Contains(x))
                         Case "any"
                             keep = predicates.Any(Function(ByVal x As String) elements.Contains(x))
+                        Case "either"
+                            keep = False
+                            For Each predicate In predicates
+                                If elements.Contains(predicate)
+                                    If Not keep
+                                        keep = True
+                                    Else
+                                        keep = False
+                                        Exit For
+                                    End If
+                                End If
+                            Next
                         Case Else
                             Throw New ArgumentException("Unknown filter kind '{0}'", filterKind)
                         End Select
