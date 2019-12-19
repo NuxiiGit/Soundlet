@@ -27,7 +27,7 @@ For a list of commands which can be used with this tool, you can simply call `mp
 Let's say you want to create a playlist of all *Jazz* songs in your music folder. First, navigate to where your `Music` folder is located, and then you would type the following:
 
 ```
-mpc-pls ./Music jazz.pls -genre Jazz
+mpc-pls ./Music jazz.pls -genre "Jazz"
 ```
 
 So long as you have correctly captioned your music with "Jazz" in the genre tag, all your files will be compiled into a playlist called `jazz.pls`.
@@ -39,17 +39,28 @@ Additionally, some commands accept *modifiers* which can change their behaviour.
  - `all` only accepts elements which satisfy all the command arguments.
  - `any` accepts any elements which satisfy one or more command arguments.
  - `either` only accepts elements which satisfy exactly one command argument.
- - `only` only accepts singleton elements which satisfy any of the command arguments.
 
-### Example
+You can also negate predicates by adding a bang (`!`) beforehand.
 
-Let's say you want to build a playlist of all songs which are `Heavy Metal` or `Ambient`, but you only want songs which are made by `Slipknot` with no other contributers/remixes. You would use the following command:
+### Example 1
+
+Let's say you want to build a playlist of songs where the genre is either *Heavy Metal* or *Ambient*, but not a fusion genre of both. You would use the following command:
 
 ```
-mpc-pls ./Music metalbent.pls -genre "Heavy Metal" "Ambient" -artist:only "Slipknot"
+mpc-pls ./Music metalbent.pls -genre:either "Heavy Metal" "Ambient"
 ```
 
-The `:only` tag on the `-artist` command modifies the behaviour such that only songs which are purely made by Slipknot are selected for the playlist, hence it will exclude all your Dubstep/Trance remixes of *People = Shit*.
+The `:either` tag in the `-genre` command modifies the behaviour such that only songs which are *either* `Heavy Metal` *or* `Ambient` are selected for the playlist, but any tracks which are marked as containing both genres are ignored.
+
+### Example 2
+
+Now, let's say you want to build a playlist of pop songs, but exclude any music by Katy Perry. You can use a bang to negate a predicate in a command, like so:
+
+```
+mpc-pls ./Music good-pop-music.pls -genre "Pop" -artist "!Katy Perry"
+```
+
+Notice the `!` at the start of the the argument to `-artist`. This will build a Pop playlist which excludes some specific artist.
 
 ## Getting Started
 
