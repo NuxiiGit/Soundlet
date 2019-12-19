@@ -80,43 +80,56 @@ Public Class Genre
     Public Sub Execute(ByRef list As Playlist, ByVal modifiers As String(), ByVal params As String()) Implements PlaylistManager.Builder.ICommand.Execute
         Dim modifier As String = If(modifiers.Length > 0, modifiers(0), "any")
         Console.WriteLine("Filtering {0} genres...", modifier)
-        For Each param In params
-            Console.WriteLine(" | {0}", param)
-        Next
+        For Each param In params : Console.WriteLine(" | {0}", param) : Next
         Filterer.Filter(list, Function(ByVal tag As Id3Tag)
-                    Dim genres As String() = tag.Genre.ToString().ToLower().Split("/"c)
-                    Return Filterer.Satisfies(params, Function(ByVal x As String) genres.Contains(x.ToLower()), modifier)
+                    Dim elements As String() = tag.Genre.ToString().ToLower().Split("/"c)
+                    Return Filterer.Satisfies(params, Function(ByVal x As String) elements.Contains(x.ToLower()), modifier)
                 End Function)
     End Sub
 
 End Class
 
-'Public Class Artist
-'    Implements PlaylistManager.Builder.ICommand
+Public Class Artist
+    Implements PlaylistManager.Builder.ICommand
 
-'    Public Sub Execute(ByRef list As Playlist, ByVal modifiers As String(), ByVal params As String()) Implements PlaylistManager.Builder.ICommand.Execute
-'        Dim filterKind As String = If(modifiers.Length > 0, modifiers(0), "any")
-'        Filter.Filter(list, "artist", filterKind, params)
-'    End Sub
+    Public Sub Execute(ByRef list As Playlist, ByVal modifiers As String(), ByVal params As String()) Implements PlaylistManager.Builder.ICommand.Execute
+        Dim modifier As String = If(modifiers.Length > 0, modifiers(0), "any")
+        Console.WriteLine("Filtering {0} artists...", modifier)
+        For Each param In params : Console.WriteLine(" | {0}", param) : Next
+        Filterer.Filter(list, Function(ByVal tag As Id3Tag)
+                    Dim elements As String() = tag.Artists.ToString().ToLower().Split("/"c)
+                    Return Filterer.Satisfies(params, Function(ByVal x As String) elements.Contains(x.ToLower()), modifier)
+                End Function)
+    End Sub
 
-'End Class
+End Class
 
-'Public Class Album
-'    Implements PlaylistManager.Builder.ICommand
+Public Class Album
+    Implements PlaylistManager.Builder.ICommand
 
-'    Public Sub Execute(ByRef list As Playlist, ByVal modifiers As String(), ByVal params As String()) Implements PlaylistManager.Builder.ICommand.Execute
-'        Dim filterKind As String = If(modifiers.Length > 0, modifiers(0), "any")
-'        Filter.Filter(list, "album", filterKind, params)
-'    End Sub
+    Public Sub Execute(ByRef list As Playlist, ByVal modifiers As String(), ByVal params As String()) Implements PlaylistManager.Builder.ICommand.Execute
+        Dim modifier As String = If(modifiers.Length > 0, modifiers(0), "any")
+        Console.WriteLine("Filtering {0} albums...", modifier)
+        For Each param In params : Console.WriteLine(" | {0}", param) : Next
+        Filterer.Filter(list, Function(ByVal tag As Id3Tag)
+                    Dim element As String = tag.Album.ToString().ToLower()
+                    Return Filterer.Satisfies(params, Function(ByVal x As String) element = x.ToLower(), modifier)
+                End Function)
+    End Sub
 
-'End Class
+End Class
 
-'Public Class Year
-'    Implements PlaylistManager.Builder.ICommand
+Public Class Year
+    Implements PlaylistManager.Builder.ICommand
 
-'    Public Sub Execute(ByRef list As Playlist, ByVal modifiers As String(), ByVal params As String()) Implements PlaylistManager.Builder.ICommand.Execute
-'        Dim filterKind As String = If(modifiers.Length > 0, modifiers(0), "any")
-'        Filter.Filter(list, "year", filterKind, params)
-'    End Sub
+    Public Sub Execute(ByRef list As Playlist, ByVal modifiers As String(), ByVal params As String()) Implements PlaylistManager.Builder.ICommand.Execute
+        Dim modifier As String = If(modifiers.Length > 0, modifiers(0), "any")
+        Console.WriteLine("Filtering {0} years...", modifier)
+        For Each param In params : Console.WriteLine(" | {0}", param) : Next
+        Filterer.Filter(list, Function(ByVal tag As Id3Tag)
+                    Dim element As String = tag.Year.ToString()
+                    Return Filterer.Satisfies(params, Function(ByVal x As String) element = x, modifier)
+                End Function)
+    End Sub
 
-'End Class
+End Class
