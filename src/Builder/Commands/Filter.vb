@@ -49,18 +49,25 @@ Public Module Filterer
         End Select
     End Function
 
-    Private Function All(ByVal xs As String(), ByVal p As Func(Of String, Boolean))
-        Return xs.All(p)
+    Private Function All(ByVal xs As String(), ByVal p As Func(Of String, Boolean)) As Boolean
+        If xs.Length < 1 Then Return False
+        For Each x In xs
+            If Not Truthy(x, p) Then Return False
+        Next
+        Return True
     End Function
 
-    Private Function Any(ByVal xs As String(), ByVal p As Func(Of String, Boolean))
-        Return xs.Any(p)
+    Private Function Any(ByVal xs As String(), ByVal p As Func(Of String, Boolean)) As Boolean
+        For Each x In xs
+            If Truthy(x, p) Then Return True
+        Next
+        Return False
     End Function
 
-    Private Function Either(ByVal xs As String(), ByVal p As Func(Of String, Boolean))
+    Private Function Either(ByVal xs As String(), ByVal p As Func(Of String, Boolean)) As Boolean
         Dim satisfied As Boolean = False
         For Each x In xs
-            If p(x)
+            If Truthy(x, p)
                 If Not satisfied
                     satisfied = True
                 Else
@@ -72,13 +79,22 @@ Public Module Filterer
         Return satisfied
     End Function
 
+    Private Function Truthy(ByVal x As String, ByVal p As Func(Of String, Boolean)) As Boolean
+        If x.Length < 1 Then Return False
+        If x(0) = "!"c
+            Return Not p(x.Remove(0, 1))
+        Else
+            Return p(x)
+        End If
+    End Function
+
 End Module
 
 Public Class Genre
     Implements PlaylistManager.Builder.ICommand
 
     Public Sub Execute(ByRef list As Playlist, ByVal modifiers As String(), ByVal params As String()) Implements PlaylistManager.Builder.ICommand.Execute
-        Dim modifier As String = If(modifiers.Length > 0, modifiers(0), "any")
+        Dim modifier As String = If(modifiers.Length > 0, modifiers(0), "all")
         Console.WriteLine("Filtering {0} genres...", modifier)
         For Each param In params : Console.WriteLine(" | {0}", param) : Next
         Filterer.Filter(list, Function(ByVal tag As Id3Tag)
