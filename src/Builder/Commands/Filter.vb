@@ -45,7 +45,6 @@ Public Module Filterer
         Case "all": Return Filterer.All(xs, p)
         Case "any": Return Filterer.Any(xs, p)
         Case "either": Return Filterer.Either(xs, p)
-        Case "only": Return Filterer.Only(xs, p)
         Case Else: Throw New ArgumentException("Unknown modifier '{0}'", modifier)
         End Select
     End Function
@@ -73,23 +72,19 @@ Public Module Filterer
         Return satisfied
     End Function
 
-    Private Function Only(ByVal xs As String(), ByVal p As Func(Of String, Boolean))
-        Return xs.Length = 1 AndAlso p(xs(0))
-    End Function
-    
 End Module
 
 Public Class Genre
     Implements PlaylistManager.Builder.ICommand
 
     Public Sub Execute(ByRef list As Playlist, ByVal modifiers As String(), ByVal params As String()) Implements PlaylistManager.Builder.ICommand.Execute
-        Console.WriteLine("Filtering genres...")
         Dim modifier As String = If(modifiers.Length > 0, modifiers(0), "any")
+        Console.WriteLine("Filtering {0} genres...", modifier)
+        For Each param In params
+            Console.WriteLine(" | {0}", param)
+        Next
         Filterer.Filter(list, Function(ByVal tag As Id3Tag)
-                    Dim genres As String() = tag.Genre _
-                            .ToString() _
-                            .ToLower() _
-                            .Split("/"c)
+                    Dim genres As String() = tag.Genre.ToString().ToLower().Split("/"c)
                     Return Filterer.Satisfies(params, Function(ByVal x As String) genres.Contains(x.ToLower()), modifier)
                 End Function)
     End Sub
