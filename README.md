@@ -1,5 +1,4 @@
-# Media Player Playlist Manager
-
+# mpc-pls
 This repository contains the source code for `mpc-pls`; a command-line tool which can be used to automatically build and edit Media Player playlist files.
 
 ### Why the Name?
